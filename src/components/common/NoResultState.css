@@ -12,6 +12,11 @@
   text-align: center;
 }
 
+.no-result-state--panel {
+  flex: 1;
+  width: 100%;
+}
+
 .no-result-state__icon {
   display: flex;
   align-items: center;

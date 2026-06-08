@@ -12,6 +12,11 @@
   text-align: center;
 }
 
+.empty-state--panel {
+  flex: 1;
+  width: 100%;
+}
+
 .empty-state__icon {
   display: flex;
   align-items: center;
