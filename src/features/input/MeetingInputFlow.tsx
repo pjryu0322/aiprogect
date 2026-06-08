@@ -448,9 +448,9 @@ export function MeetingInputFlowMeetingFiles({ className = '' }: MeetingInputFlo
   const { files, fieldErrors, addFile, removeFile } = useMeetingInputFlowContext();
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      addFile(file);
+    const selectedFiles = event.target.files;
+    if (selectedFiles) {
+      Array.from(selectedFiles).forEach((file) => addFile(file));
     }
     event.target.value = '';
   };
@@ -467,6 +467,7 @@ export function MeetingInputFlowMeetingFiles({ className = '' }: MeetingInputFlo
         type="file"
         className="meeting-input-file-picker"
         accept={ACCEPTED_AUDIO_EXTENSIONS.join(',')}
+        multiple
         onChange={handleInputChange}
         aria-describedby={fieldErrors.files ? 'meeting-input-file-error' : undefined}
       />
