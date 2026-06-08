@@ -37,9 +37,9 @@ export function MeetingFilesBlock({
   const resolvedStatus = isReadingMetadata ? 'uploading' : screenStatus;
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      addFile(file);
+    const selectedFiles = event.target.files;
+    if (selectedFiles) {
+      Array.from(selectedFiles).forEach((file) => addFile(file));
     }
     event.target.value = '';
   };
@@ -81,6 +81,7 @@ export function MeetingFilesBlock({
           type="file"
           className="input-screen-file-picker"
           accept={ACCEPTED_AUDIO_EXTENSIONS.join(',')}
+          multiple
           onChange={handleInputChange}
           aria-describedby={fieldErrors.files ? 'input-screen-file-error' : undefined}
         />
