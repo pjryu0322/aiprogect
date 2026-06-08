@@ -5,7 +5,6 @@ import type { MeetingSummary, ScriptSegment } from '../../../data/types';
 import type { ResultScreenStatus, ResultTab } from '../../../screens/ResultScreen.types';
 import { ScriptView } from './ScriptView';
 import { SummaryCards } from './SummaryCards';
-import './resultScreen.css';
 
 export interface ResultTabPanelProps {
   activeTab: ResultTab;

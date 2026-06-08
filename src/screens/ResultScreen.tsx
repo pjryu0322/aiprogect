@@ -5,6 +5,7 @@ import {
   useMemo,
   type ReactNode,
 } from 'react';
+import type { MeetingData } from '../data/types';
 import { ResultPanel } from '../components/screens/result';
 import type {
   DraftTimelineEntry,
@@ -14,6 +15,7 @@ import type {
 } from '../data/types';
 import {
   RESULT_SCREEN_STATUS_LABELS,
+  resolveResultScreenFromMeeting,
   resolveResultScreenProps,
   resolveResultScreenStatus,
   type ResultScreenProps,
@@ -190,6 +192,35 @@ export function ResultScreen({
   );
 }
 
+export interface ResultScreenFromMeetingProps {
+  meetingData: MeetingData;
+  onRetry?: () => void;
+  onTabChange?: ResultScreenProps['onTabChange'];
+  onStatusChange?: ResultScreenProps['onStatusChange'];
+  defaultTab?: ResultTab;
+  className?: string;
+}
+
+export function ResultScreenFromMeeting({
+  meetingData,
+  onRetry,
+  onTabChange,
+  onStatusChange,
+  defaultTab,
+  className,
+}: ResultScreenFromMeetingProps) {
+  return (
+    <ResultScreen
+      meetingData={meetingData}
+      onRetry={onRetry}
+      onTabChange={onTabChange}
+      onStatusChange={onStatusChange}
+      defaultTab={defaultTab}
+      className={className}
+    />
+  );
+}
+
 export type {
   ResultScreenProps,
   ResultScreenSlotProps,
@@ -198,6 +229,7 @@ export type {
 } from './ResultScreen.types';
 export {
   resolveResultScreenFromMeeting,
+  resolveResultScreenProps,
   resolveResultScreenStatus,
   RESULT_SCREEN_STATUS_LABELS,
   RESULT_TABS,

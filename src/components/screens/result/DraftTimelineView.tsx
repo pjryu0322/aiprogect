@@ -1,28 +1,5 @@
 import type { DraftTimelineEntry, ProcessingStatus } from '../../../data/types';
-import './resultScreen.css';
-
-const STAGE_LABELS: Record<DraftTimelineEntry['stage'], string> = {
-  uploading: '업로드',
-  stt_processing: 'STT 변환',
-  speaker_waiting: '화자 분리',
-  draft_pending: '초안 생성',
-  complete: '완료',
-  summary: '요약 생성',
-};
-
-function formatTimestamp(value: string): string {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  return date.toLocaleString('ko-KR', {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-}
+import { formatTimestamp, STAGE_LABELS } from './utils';
 
 function TimelineStatusDot({ status }: { status: ProcessingStatus }) {
   if (status === 'processing') {
@@ -40,7 +17,11 @@ function TimelineStatusDot({ status }: { status: ProcessingStatus }) {
   return <span className="result-screen-timeline__dot result-screen-timeline__dot--idle" />;
 }
 
-export function DraftTimelineView({ entries }: { entries: DraftTimelineEntry[] }) {
+interface DraftTimelineViewProps {
+  entries: DraftTimelineEntry[];
+}
+
+export function DraftTimelineView({ entries }: DraftTimelineViewProps) {
   if (entries.length === 0) {
     return <p className="result-screen-timeline__empty">아직 진행 이력이 없습니다.</p>;
   }

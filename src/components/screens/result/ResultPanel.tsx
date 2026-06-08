@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import { DraftTimelineLoading } from '../../common/LoadingState';
 import type { DraftTimelineEntry, MeetingSummary, ProcessingStatus, ScriptSegment } from '../../../data/types';
 import {
-  RESULT_TABS,
   resolveResultScreenStatus,
   type ResultScreenSlotProps,
   type ResultScreenStatus,
@@ -10,6 +9,7 @@ import {
 } from '../../../screens/ResultScreen.types';
 import { DraftTimelineView } from './DraftTimelineView';
 import { ResultTabPanel } from './ResultTabPanel';
+import { ResultTabs } from './ResultTabs';
 import './resultScreen.css';
 
 export interface ResultPanelProps extends ResultScreenSlotProps {
@@ -51,7 +51,8 @@ export function ResultPanel({
     [statusProp, stageStatus, summary, script],
   );
 
-  const isTimelineLoading = status === 'loading' && draftTimeline.some((entry) => entry.status === 'processing');
+  const isTimelineLoading =
+    status === 'loading' && draftTimeline.some((entry) => entry.status === 'processing');
   const showReviewHint = status === 'success' && (summary !== null || script.length > 0);
 
   const handleTabChange = (tab: ResultTab) => {
@@ -69,22 +70,7 @@ export function ResultPanel({
           결과 패널
         </h2>
 
-        <div className="result-tabs" role="tablist" aria-label="결과 보기">
-          {RESULT_TABS.map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              role="tab"
-              className={`result-tab${activeTab === tab.id ? ' result-tab--active' : ''}`}
-              aria-selected={activeTab === tab.id}
-              aria-controls={`result-tabpanel-${tab.id}`}
-              id={`result-tab-${tab.id}`}
-              onClick={() => handleTabChange(tab.id)}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
+        <ResultTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
         <div
           id={`result-tabpanel-${activeTab}`}

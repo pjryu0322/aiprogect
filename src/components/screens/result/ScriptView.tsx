@@ -1,13 +1,11 @@
 import type { ScriptSegment } from '../../../data/types';
-import './resultScreen.css';
+import { formatSegmentTime } from './utils';
 
-function formatSegmentTime(seconds: number): string {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+interface ScriptViewProps {
+  script: ScriptSegment[];
 }
 
-export function ScriptView({ script }: { script: ScriptSegment[] }) {
+export function ScriptView({ script }: ScriptViewProps) {
   return (
     <div className="result-screen-script" role="list" aria-label="화자별 스크립트">
       {script.map((segment) => (
