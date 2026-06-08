@@ -1,9 +1,11 @@
 import type { ReactNode } from 'react';
 import type { ProcessingStatus } from '../../data/types';
+import { LoadingState } from './LoadingState';
 import { ErrorMessage, type ErrorVariant } from './ErrorMessage';
 import './ErrorState.css';
 
 export type ErrorScenario = 'upload' | 'conversion' | 'fetch';
+export type ErrorFlowStatus = 'idle' | 'error' | 'retrying';
 
 const ERROR_PRESETS: Record<ErrorScenario, { message: string; description: string }> = {
   upload: {
@@ -28,33 +30,80 @@ export interface ErrorStateProps {
   error?: boolean;
   failed?: boolean;
   stageStatus?: ProcessingStatus;
+  status?: ErrorFlowStatus;
+  retrying?: boolean;
   scenario?: ErrorScenario;
   message?: string;
   description?: string;
   variant?: ErrorVariant;
   onRetry?: () => void;
   retryLabel?: string;
+  retryingMessage?: string;
   className?: string;
   children?: ReactNode;
+}
+
+function resolveFlowStatus(
+  status: ErrorFlowStatus | undefined,
+  retrying: boolean,
+  hasError: boolean,
+): ErrorFlowStatus {
+  if (status) {
+    return status;
+  }
+  if (retrying) {
+    return 'retrying';
+  }
+  return hasError ? 'error' : 'idle';
+}
+
+function resolveLoadingVariant(variant: ErrorVariant): 'block' | 'inline' | 'timeline' {
+  if (variant === 'inline') {
+    return 'inline';
+  }
+  if (variant === 'timeline') {
+    return 'timeline';
+  }
+  return 'block';
 }
 
 export function ErrorState({
   error,
   failed,
   stageStatus,
+  status,
+  retrying = false,
   scenario,
   message,
   description,
   variant = 'block',
   onRetry,
   retryLabel,
+  retryingMessage = '다시 시도하는 중입니다…',
   className = '',
   children,
 }: ErrorStateProps) {
   const hasError = error ?? failed ?? isErrorStatus(stageStatus);
+  const flowStatus = resolveFlowStatus(status, retrying, hasError);
 
-  if (!hasError) {
+  if (flowStatus === 'idle') {
     return <>{children}</>;
+  }
+
+  if (flowStatus === 'retrying') {
+    return (
+      <div
+        className={`error-state error-state--${variant}${className ? ` ${className}` : ''}`}
+        data-error-state="retrying"
+      >
+        <LoadingState
+          loading
+          message={retryingMessage}
+          variant={resolveLoadingVariant(variant)}
+          className="error-state__retrying"
+        />
+      </div>
+    );
   }
 
   const preset = scenario ? ERROR_PRESETS[scenario] : undefined;
@@ -83,23 +132,29 @@ export function ErrorState({
  */
 export function WorkspaceErrorState({
   stageStatus,
+  status,
+  retrying,
   scenario = 'conversion',
   message,
   description,
   onRetry,
   retryLabel,
+  retryingMessage,
   className = '',
   children,
 }: Omit<ErrorStateProps, 'variant' | 'error' | 'failed'>) {
   return (
     <ErrorState
       stageStatus={stageStatus}
+      status={status}
+      retrying={retrying}
       scenario={scenario}
       message={message}
       description={description}
       variant="block"
       onRetry={onRetry}
       retryLabel={retryLabel}
+      retryingMessage={retryingMessage}
       className={className}
     >
       {children}
@@ -114,11 +169,14 @@ export function WorkspaceErrorState({
 export function ResultPanelErrorState({
   error,
   failed,
+  status,
+  retrying,
   scenario = 'fetch',
   message,
   description,
   onRetry,
   retryLabel,
+  retryingMessage,
   className = '',
   children,
 }: Omit<ErrorStateProps, 'variant' | 'stageStatus'>) {
@@ -126,12 +184,15 @@ export function ResultPanelErrorState({
     <ErrorState
       error={error}
       failed={failed}
+      status={status}
+      retrying={retrying}
       scenario={scenario}
       message={message}
       description={description}
       variant="panel"
       onRetry={onRetry}
       retryLabel={retryLabel}
+      retryingMessage={retryingMessage}
       className={className}
     >
       {children}

@@ -23,3 +23,7 @@
 .error-state--timeline {
   align-items: stretch;
 }
+
+.error-state__retrying {
+  width: 100%;
+}
