@@ -676,6 +676,7 @@ export function MeetingInputFlowWorkspace({ className = '' }: MeetingInputFlowWo
     statusMessage,
     validate,
     buildPayload,
+    removeWorkspaceTask,
   } = useMeetingInputFlowContext();
 
   const isReady = status === 'ready';
@@ -717,6 +718,14 @@ export function MeetingInputFlowWorkspace({ className = '' }: MeetingInputFlowWo
             {workspaceTasks.map((task) => (
               <li key={task.id} className="meeting-input-task-item">
                 <span className="meeting-input-task-text">{task.text}</span>
+                <button
+                  type="button"
+                  className="meeting-input-participant-remove"
+                  onClick={() => removeWorkspaceTask(task.id)}
+                  aria-label="작업 제거"
+                >
+                  제거
+                </button>
               </li>
             ))}
           </ul>
@@ -769,9 +778,6 @@ export function MeetingInputFlowWorkspaceInputBar({
   const [draft, setDraft] = useState('');
 
   const submitDraft = () => {
-    if (!draft.trim()) {
-      return;
-    }
     const added = addWorkspaceTask(draft);
     if (added) {
       setDraft('');
