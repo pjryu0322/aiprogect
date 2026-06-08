@@ -65,3 +65,27 @@ export function Skeleton({
     />
   );
 }
+
+export interface SkeletonTimelineProps {
+  itemCount?: number;
+  className?: string;
+}
+
+export function SkeletonTimeline({ itemCount = 2, className = '' }: SkeletonTimelineProps) {
+  return (
+    <div
+      className={`skeleton-group skeleton-group--timeline${className ? ` ${className}` : ''}`}
+      aria-hidden="true"
+    >
+      {Array.from({ length: itemCount }, (_, index) => (
+        <div key={index} className="skeleton-timeline-item">
+          <Skeleton variant="circle" width={24} height={24} />
+          <div className="skeleton-timeline-content">
+            <Skeleton variant="text" width="55%" lines={1} />
+            <Skeleton variant="text" width="88%" lines={1} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}

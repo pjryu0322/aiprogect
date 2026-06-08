@@ -22,15 +22,21 @@
 }
 
 .loading-state--timeline {
-  flex-direction: row;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: stretch;
   justify-content: flex-start;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 12px;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  background: #fff;
+  border: 1px dashed #d1d5db;
+  background: #f9fafb;
   color: #374151;
+}
+
+.loading-state--timeline .loading-state__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .loading-state__message {
@@ -59,6 +65,84 @@
   border-radius: inherit;
   background: linear-gradient(90deg, #3b82f6, #1d4ed8);
   transition: width 0.3s ease;
+}
+
+.loading-state__entries {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.loading-state__entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.loading-state__entry--processing {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
+.loading-state__entry-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.loading-state__entry-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.loading-state__entry-dot--success {
+  background: #22c55e;
+}
+
+.loading-state__entry-dot--error {
+  background: #ef4444;
+}
+
+.loading-state__entry-dot--idle {
+  background: #d1d5db;
+}
+
+.loading-state__entry-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.loading-state__entry-text {
+  margin: 0;
+  font-size: 12px;
+  color: #374151;
+  line-height: 1.4;
+}
+
+.loading-state__entry-text--muted {
+  color: #9ca3af;
+}
+
+.loading-state__entry-timestamp {
+  margin: 0;
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.stage-chip-loading {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  vertical-align: middle;
 }
 
 .loading-spinner {
@@ -91,5 +175,17 @@
 @keyframes loading-spinner-rotate {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-spinner {
+    animation: none;
+    border-top-color: #1d4ed8;
+    opacity: 0.8;
+  }
+
+  .loading-state__progress-bar {
+    transition: none;
   }
 }
