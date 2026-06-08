@@ -15,7 +15,18 @@ export function createMeetingFixture(scenario: SampleScenario): MeetingData {
 }
 
 export const idleMeetingFixture = createMeetingFixture('idle');
+export const uploadingMeetingFixture = createMeetingFixture('uploading');
+export const sttProcessingMeetingFixture = createMeetingFixture('stt_processing');
+export const speakerWaitingMeetingFixture = createMeetingFixture('speaker_waiting');
+export const draftPendingMeetingFixture = createMeetingFixture('draft_pending');
 export const successMeetingFixture = createMeetingFixture('success');
+
+export function assertAllFixtures(): { scenario: SampleScenario; valid: boolean }[] {
+  return FIXTURE_SCENARIOS.map((scenario) => ({
+    scenario,
+    valid: assertMeetingDataShape(createMeetingFixture(scenario)),
+  }));
+}
 
 export function assertMeetingDataShape(data: MeetingData): boolean {
   return (

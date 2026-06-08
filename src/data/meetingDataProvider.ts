@@ -83,3 +83,28 @@ export function isIdleState(data: MeetingData): boolean {
 export function getDataSource(): DataSource {
   return providerOptions.source;
 }
+
+const STAGE_SCENARIO_MAP: Record<
+  MeetingData['workspaceStatus']['currentStage'],
+  SampleScenario
+> = {
+  uploading: 'uploading',
+  stt_processing: 'stt_processing',
+  speaker_waiting: 'speaker_waiting',
+  draft_pending: 'draft_pending',
+  complete: 'success',
+};
+
+export function getMeetingDataByStage(
+  stage: MeetingData['workspaceStatus']['currentStage'],
+): MeetingData {
+  return getMeetingDataSync(STAGE_SCENARIO_MAP[stage]);
+}
+
+export function isProcessingState(data: MeetingData): boolean {
+  return data.workspaceStatus.stageStatus === 'processing';
+}
+
+export function isEmptyResultState(data: MeetingData): boolean {
+  return data.script.length === 0 && data.summary === null;
+}
