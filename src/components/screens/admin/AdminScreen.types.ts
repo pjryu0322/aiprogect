@@ -105,3 +105,23 @@ export function summarizeAdminRecords(records: AdminMeetingRecord[]): AdminStatu
     { total: 0, processing: 0, complete: 0, idleOrError: 0 },
   );
 }
+
+export type AdminStatusFilter = 'all' | ProcessingStatus;
+
+export const STATUS_FILTER_OPTIONS: { id: ProcessingStatus; label: string }[] = [
+  { id: 'idle', label: STATUS_LABELS.idle },
+  { id: 'processing', label: STATUS_LABELS.processing },
+  { id: 'success', label: STATUS_LABELS.success },
+  { id: 'error', label: STATUS_LABELS.error },
+];
+
+export function filterAdminRecords(
+  records: AdminMeetingRecord[],
+  filter: AdminStatusFilter,
+): AdminMeetingRecord[] {
+  if (filter === 'all') {
+    return records;
+  }
+
+  return records.filter((record) => record.stageStatus === filter);
+}

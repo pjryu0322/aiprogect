@@ -1,5 +1,12 @@
-import type { AdminMeetingRecord, AdminScreenStatus } from './AdminScreen.types';
-import { STAGE_LABELS, STATUS_LABELS } from './AdminScreen.types';
+import { useMemo, useState } from 'react';
+import { EmptyState } from '../../common/EmptyState';
+import type { AdminMeetingRecord, AdminScreenStatus, AdminStatusFilter } from './AdminScreen.types';
+import {
+  STAGE_LABELS,
+  STATUS_FILTER_OPTIONS,
+  STATUS_LABELS,
+  filterAdminRecords,
+} from './AdminScreen.types';
 import './admin.css';
 
 export interface AdminMeetingListProps {
@@ -67,7 +74,13 @@ export function AdminMeetingList({
   onSelectRecord,
   className = '',
 }: AdminMeetingListProps) {
+  const [statusFilter, setStatusFilter] = useState<AdminStatusFilter>('all');
   const isLoading = screenStatus === 'loading';
+
+  const filteredRecords = useMemo(
+    () => filterAdminRecords(records, statusFilter),
+    [records, statusFilter],
+  );
 
   return (
     <section
@@ -80,17 +93,43 @@ export function AdminMeetingList({
           회의 분석 목록
         </h2>
         <p className="admin-meeting-list__count" aria-live="polite">
-          {records.length}건
+          {filteredRecords.length}건
         </p>
       </div>
 
-      {records.length === 0 ? (
-        <p className="admin-meeting-list__empty" role="status">
-          표시할 회의 분석 항목이 없습니다.
-        </p>
+      <div className="admin-filter-tabs" role="tablist" aria-label="상태 필터">
+        <button
+          type="button"
+          role="tab"
+          className={`admin-filter-tab${statusFilter === 'all' ? ' admin-filter-tab--active' : ''}`}
+          aria-selected={statusFilter === 'all'}
+          onClick={() => setStatusFilter('all')}
+        >
+          전체
+        </button>
+        {STATUS_FILTER_OPTIONS.map((option) => (
+          <button
+            key={option.id}
+            type="button"
+            role="tab"
+            className={`admin-filter-tab${statusFilter === option.id ? ' admin-filter-tab--active' : ''}`}
+            aria-selected={statusFilter === option.id}
+            onClick={() => setStatusFilter(option.id)}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+
+      {filteredRecords.length === 0 ? (
+        <EmptyState
+          title="표시할 회의가 없습니다"
+          description="선택한 상태에 해당하는 회의 처리 기록이 없습니다. 다른 필터를 선택해 보세요."
+          variant="panel"
+        />
       ) : (
         <div className="admin-meeting-list__items" role="list" aria-label="회의 분석 항목">
-          {records.map((record) => {
+          {filteredRecords.map((record) => {
             const isSelected = record.id === selectedRecordId;
             const statusTone = resolveStatusTone(record);
             const primaryFile = record.files[0];

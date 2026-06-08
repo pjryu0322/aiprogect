@@ -33,24 +33,37 @@ export interface AdminScreenProps extends AdminScreenActions {
   className?: string;
   initialStatus?: AdminScreenStatus;
   scenarios?: SampleScenario[];
+  simulateInitialLoading?: boolean;
 }
+
+const INITIAL_LOAD_DELAY_MS = 450;
 
 export function AdminScreen({
   className = '',
-  initialStatus = 'idle',
+  initialStatus,
   scenarios = DEFAULT_SCENARIOS,
+  simulateInitialLoading = true,
   onReprocess,
   onConfirm,
   onStatusChange,
   onRefresh,
   onSelectRecord,
 }: AdminScreenProps) {
-  const [screenStatus, setScreenStatus] = useState<AdminScreenStatus>(initialStatus);
-  const [records, setRecords] = useState<AdminMeetingRecord[]>(() => buildAdminRecords(scenarios));
-  const [selectedRecordId, setSelectedRecordId] = useState<string | null>(
-    () => records[0]?.id ?? null,
+  const [screenStatus, setScreenStatus] = useState<AdminScreenStatus>(
+    () => initialStatus ?? (simulateInitialLoading ? 'loading' : 'idle'),
   );
+  const [records, setRecords] = useState<AdminMeetingRecord[]>(() =>
+    simulateInitialLoading ? [] : buildAdminRecords(scenarios),
+  );
+  const [selectedRecordId, setSelectedRecordId] = useState<string | null>(() => {
+    if (simulateInitialLoading) {
+      return null;
+    }
+    const initialRecords = buildAdminRecords(scenarios);
+    return initialRecords[0]?.id ?? null;
+  });
   const refreshTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const initialLoadTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const summary = useMemo(() => summarizeAdminRecords(records), [records]);
   const selectedRecord = useMemo(
@@ -59,9 +72,32 @@ export function AdminScreen({
   );
 
   useEffect(() => {
+    if (!simulateInitialLoading || initialStatus !== undefined) {
+      return;
+    }
+
+    initialLoadTimerRef.current = setTimeout(() => {
+      const nextRecords = buildAdminRecords(scenarios);
+      setRecords(nextRecords);
+      setSelectedRecordId(nextRecords[0]?.id ?? null);
+      setScreenStatus('idle');
+      initialLoadTimerRef.current = null;
+    }, INITIAL_LOAD_DELAY_MS);
+
+    return () => {
+      if (initialLoadTimerRef.current) {
+        clearTimeout(initialLoadTimerRef.current);
+      }
+    };
+  }, [initialStatus, scenarios, simulateInitialLoading]);
+
+  useEffect(() => {
     return () => {
       if (refreshTimerRef.current) {
         clearTimeout(refreshTimerRef.current);
+      }
+      if (initialLoadTimerRef.current) {
+        clearTimeout(initialLoadTimerRef.current);
       }
     };
   }, []);
