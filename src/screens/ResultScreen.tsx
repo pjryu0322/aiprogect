@@ -14,6 +14,7 @@ import type {
 } from '../data/types';
 import {
   RESULT_SCREEN_STATUS_LABELS,
+  resolveResultScreenProps,
   resolveResultScreenStatus,
   type ResultScreenProps,
   type ResultScreenSlotProps,
@@ -49,12 +50,14 @@ function useResultScreenContext(): ResultScreenContextValue {
 
 function ResultScreenProvider({
   status: statusProp,
-  summary = null,
-  script = [],
-  draftTimeline = [],
-  stageStatus = 'idle',
-  loadingMessage = '결과를 불러오는 중입니다…',
-  progressPercent,
+  scenario,
+  meetingData,
+  summary: summaryProp,
+  script: scriptProp,
+  draftTimeline: draftTimelineProp,
+  stageStatus: stageStatusProp,
+  loadingMessage: loadingMessageProp,
+  progressPercent: progressPercentProp,
   error,
   errorMessage,
   errorDescription,
@@ -62,20 +65,46 @@ function ResultScreenProvider({
   onTabChange,
   children,
 }: ResultScreenProps & { children: ReactNode }) {
+  const resolved = useMemo(
+    () =>
+      resolveResultScreenProps({
+        scenario,
+        meetingData,
+        status: statusProp,
+        summary: summaryProp,
+        script: scriptProp,
+        draftTimeline: draftTimelineProp,
+        stageStatus: stageStatusProp,
+        loadingMessage: loadingMessageProp,
+        progressPercent: progressPercentProp,
+      }),
+    [
+      scenario,
+      meetingData,
+      statusProp,
+      summaryProp,
+      scriptProp,
+      draftTimelineProp,
+      stageStatusProp,
+      loadingMessageProp,
+      progressPercentProp,
+    ],
+  );
+
   const status = useMemo(
-    () => statusProp ?? resolveResultScreenStatus(stageStatus, summary, script),
-    [statusProp, stageStatus, summary, script],
+    () => resolved.status ?? resolveResultScreenStatus(resolved.stageStatus, resolved.summary, resolved.script),
+    [resolved.status, resolved.stageStatus, resolved.summary, resolved.script],
   );
 
   const value = useMemo<ResultScreenContextValue>(
     () => ({
       status,
-      summary,
-      script,
-      draftTimeline,
-      stageStatus,
-      loadingMessage,
-      progressPercent,
+      summary: resolved.summary,
+      script: resolved.script,
+      draftTimeline: resolved.draftTimeline,
+      stageStatus: resolved.stageStatus,
+      loadingMessage: resolved.loadingMessage,
+      progressPercent: resolved.progressPercent,
       error,
       errorMessage,
       errorDescription,
@@ -84,12 +113,12 @@ function ResultScreenProvider({
     }),
     [
       status,
-      summary,
-      script,
-      draftTimeline,
-      stageStatus,
-      loadingMessage,
-      progressPercent,
+      resolved.summary,
+      resolved.script,
+      resolved.draftTimeline,
+      resolved.stageStatus,
+      resolved.loadingMessage,
+      resolved.progressPercent,
       error,
       errorMessage,
       errorDescription,
