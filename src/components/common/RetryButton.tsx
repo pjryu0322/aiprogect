@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Spinner } from './LoadingState';
 import './RetryButton.css';
 
@@ -24,16 +24,18 @@ export function RetryButton({
   size = 'md',
 }: RetryButtonProps) {
   const [internalRetrying, setInternalRetrying] = useState(false);
+  const retryInFlightRef = useRef(false);
   const isControlled = retryingProp !== undefined || loading !== undefined;
   const retrying = retryingProp ?? loading ?? internalRetrying;
   const isDisabled = disabled || retrying;
 
   const handleClick = useCallback(async () => {
-    if (isDisabled) {
+    if (disabled || retryInFlightRef.current) {
       return;
     }
 
     if (!isControlled) {
+      retryInFlightRef.current = true;
       setInternalRetrying(true);
     }
 
@@ -41,10 +43,11 @@ export function RetryButton({
       await onRetry();
     } finally {
       if (!isControlled) {
+        retryInFlightRef.current = false;
         setInternalRetrying(false);
       }
     }
-  }, [onRetry, isDisabled, isControlled]);
+  }, [onRetry, disabled, isControlled]);
 
   return (
     <button

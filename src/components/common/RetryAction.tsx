@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { ProcessingStatus } from '../../data/types';
 import { type ErrorVariant } from './ErrorMessage';
 import { isErrorStatus, type ErrorScenario } from './ErrorState';
+import { LoadingState } from './LoadingState';
 import { RetryButton } from './RetryButton';
 import './ErrorMessage.css';
 import './ErrorState.css';
@@ -22,6 +23,18 @@ const ERROR_PRESETS: Record<ErrorScenario, { message: string; description: strin
   },
 };
 
+const DEFAULT_RETRYING_MESSAGE = '다시 시도하는 중입니다…';
+
+function resolveLoadingVariant(variant: ErrorVariant): 'block' | 'inline' | 'timeline' {
+  if (variant === 'inline') {
+    return 'inline';
+  }
+  if (variant === 'timeline') {
+    return 'timeline';
+  }
+  return 'block';
+}
+
 export interface RetryActionProps {
   message: string;
   description?: string;
@@ -30,6 +43,7 @@ export interface RetryActionProps {
   retrying?: boolean;
   label?: string;
   retryingLabel?: string;
+  retryingMessage?: string;
   className?: string;
 }
 
@@ -38,11 +52,31 @@ export function RetryAction({
   description,
   variant = 'block',
   onRetry,
-  retrying,
+  retrying = false,
   label,
   retryingLabel,
+  retryingMessage = DEFAULT_RETRYING_MESSAGE,
   className = '',
 }: RetryActionProps) {
+  if (retrying) {
+    return (
+      <div
+        className={`retry-action retry-action--${variant} retry-action--retrying${className ? ` ${className}` : ''}`}
+        data-retry-action="retrying"
+        role="status"
+        aria-live="polite"
+        aria-busy="true"
+      >
+        <LoadingState
+          loading
+          message={retryingMessage}
+          variant={resolveLoadingVariant(variant)}
+          className="retry-action__loading"
+        />
+      </div>
+    );
+  }
+
   return (
     <div
       className={`retry-action error-message error-message--${variant}${className ? ` ${className}` : ''}`}
@@ -84,6 +118,7 @@ export interface RetryFailureStateProps {
   retrying?: boolean;
   label?: string;
   retryingLabel?: string;
+  retryingMessage?: string;
   className?: string;
   children?: ReactNode;
 }
@@ -100,27 +135,29 @@ export function RetryFailureState({
   description,
   variant = 'block',
   onRetry,
-  retrying,
+  retrying = false,
   label,
   retryingLabel,
+  retryingMessage,
   className = '',
   children,
 }: RetryFailureStateProps) {
   const hasError = error ?? failed ?? isErrorStatus(stageStatus);
 
-  if (!hasError) {
+  if (!hasError && !retrying) {
     return <>{children}</>;
   }
 
   const preset = scenario ? ERROR_PRESETS[scenario] : undefined;
   const resolvedMessage = message ?? preset?.message ?? '오류가 발생했습니다';
   const resolvedDescription = description ?? preset?.description;
+  const flowState = retrying ? 'retrying' : 'failed';
 
   return (
     <div
       className={`error-state error-state--${variant}${className ? ` ${className}` : ''}`}
-      data-error-state="active"
-      data-retry-state={retrying ? 'retrying' : 'failed'}
+      data-error-state={retrying ? 'retrying' : 'active'}
+      data-retry-state={flowState}
     >
       <RetryAction
         message={resolvedMessage}
@@ -130,6 +167,7 @@ export function RetryFailureState({
         retrying={retrying}
         label={label}
         retryingLabel={retryingLabel}
+        retryingMessage={retryingMessage}
       />
     </div>
   );
@@ -146,6 +184,7 @@ export interface LoadingFailureRetryProps {
   retrying?: boolean;
   label?: string;
   retryingLabel?: string;
+  retryingMessage?: string;
   className?: string;
   children?: ReactNode;
 }
@@ -155,20 +194,21 @@ export function LoadingFailureRetry({
   message = '처리를 완료하지 못했습니다',
   description = '네트워크 또는 서버 오류로 작업이 중단되었습니다.',
   onRetry,
-  retrying,
+  retrying = false,
   label,
   retryingLabel,
+  retryingMessage,
   className = '',
   children,
 }: LoadingFailureRetryProps) {
-  if (!failed) {
+  if (!failed && !retrying) {
     return <>{children}</>;
   }
 
   return (
     <div
       className={`retry-action-loading-failure${className ? ` ${className}` : ''}`}
-      data-loading-failure="active"
+      data-loading-failure={retrying ? 'retrying' : 'active'}
       data-retry-state={retrying ? 'retrying' : 'failed'}
     >
       <RetryAction
@@ -179,6 +219,7 @@ export function LoadingFailureRetry({
         retrying={retrying}
         label={label}
         retryingLabel={retryingLabel}
+        retryingMessage={retryingMessage}
       />
     </div>
   );
@@ -196,6 +237,7 @@ export function WorkspaceRetryAction({
   retrying,
   label,
   retryingLabel,
+  retryingMessage,
   className = '',
   children,
 }: Omit<RetryFailureStateProps, 'variant' | 'error' | 'failed'>) {
@@ -210,6 +252,7 @@ export function WorkspaceRetryAction({
       retrying={retrying}
       label={label}
       retryingLabel={retryingLabel}
+      retryingMessage={retryingMessage}
       className={className}
     >
       {children}
@@ -230,6 +273,7 @@ export function ResultPanelRetryAction({
   retrying,
   label,
   retryingLabel,
+  retryingMessage,
   className = '',
   children,
 }: Omit<RetryFailureStateProps, 'variant' | 'stageStatus'>) {
@@ -245,6 +289,7 @@ export function ResultPanelRetryAction({
       retrying={retrying}
       label={label}
       retryingLabel={retryingLabel}
+      retryingMessage={retryingMessage}
       className={className}
     >
       {children}

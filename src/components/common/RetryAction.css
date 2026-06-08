@@ -10,3 +10,17 @@
 .retry-action__button {
   min-width: 96px;
 }
+
+.retry-action__loading {
+  width: 100%;
+}
+
+.retry-action--block .retry-action__loading,
+.retry-action-loading-failure .retry-action__loading {
+  min-height: 200px;
+}
+
+.retry-action--panel .retry-action__loading {
+  flex: 1;
+  min-height: 120px;
+}
