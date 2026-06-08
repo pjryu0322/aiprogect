@@ -6,9 +6,9 @@ export type MockScenario = SampleScenario;
 const MOCK_PATH_MAP: Record<MockScenario, string> = {
   idle: '/mock-data/meeting-idle.json',
   uploading: '/mock-data/meeting-uploading.json',
-  stt_processing: '/mock-data/meeting-stt-processing.json',
-  speaker_waiting: '/mock-data/meeting-speaker-waiting.json',
-  draft_pending: '/mock-data/meeting-draft-pending.json',
+  stt_processing: '/mock-data/meeting-stt_processing.json',
+  speaker_waiting: '/mock-data/meeting-speaker_waiting.json',
+  draft_pending: '/mock-data/meeting-draft_pending.json',
   success: '/mock-data/meeting-success.json',
 };
 
