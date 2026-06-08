@@ -36,3 +36,5 @@ export const START_FLOW_STAGES: { id: ConversionStage; label: string }[] = [
 ];
 
 export const ACCEPTED_AUDIO_EXTENSIONS = ['.mp3', '.m4a', '.wav', '.ogg', '.webm', '.aac', '.flac'];
+
+export const MAX_AUDIO_FILE_SIZE_BYTES = 500 * 1024 * 1024;

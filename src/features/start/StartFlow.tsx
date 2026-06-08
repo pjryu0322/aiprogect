@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
   type ChangeEvent,
+  type DragEvent,
   type ReactNode,
 } from 'react';
 import { ConversionProgressMessage } from '../../components/common/LoadingState';
@@ -17,6 +18,7 @@ import { WorkspaceEmptyState } from '../../components/common/EmptyState';
 import type { ConversionStage } from '../../data/types';
 import {
   ACCEPTED_AUDIO_EXTENSIONS,
+  MAX_AUDIO_FILE_SIZE_BYTES,
   START_FLOW_STAGES,
   type StartFlowContextValue,
   type StartFlowFile,
@@ -47,6 +49,22 @@ function extractFormat(fileName: string): string {
 function isAcceptedAudioFile(file: File): boolean {
   const extension = `.${extractFormat(file.name)}`;
   return ACCEPTED_AUDIO_EXTENSIONS.includes(extension);
+}
+
+function validateAudioFile(file: File): string | null {
+  if (!isAcceptedAudioFile(file)) {
+    return `지원하지 않는 파일 형식입니다. ${ACCEPTED_AUDIO_EXTENSIONS.join(', ')} 형식만 업로드할 수 있습니다.`;
+  }
+
+  if (file.size <= 0) {
+    return '빈 파일은 업로드할 수 없습니다.';
+  }
+
+  if (file.size > MAX_AUDIO_FILE_SIZE_BYTES) {
+    return `파일 크기는 ${formatFileSize(MAX_AUDIO_FILE_SIZE_BYTES)} 이하여야 합니다.`;
+  }
+
+  return null;
 }
 
 function createStartFlowFile(file: File): StartFlowFile {
@@ -94,6 +112,14 @@ export function StartFlowProvider({
   const [currentStage, setCurrentStage] = useState<ConversionStage>('uploading');
   const [progressPercent, setProgressPercent] = useState(0);
   const [statusMessage, setStatusMessage] = useState(INITIAL_STATUS_MESSAGE);
+  const uploadTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const clearUploadTimer = useCallback(() => {
+    if (uploadTimerRef.current) {
+      clearInterval(uploadTimerRef.current);
+      uploadTimerRef.current = null;
+    }
+  }, []);
 
   const updateStatus = useCallback(
     (nextStatus: StartFlowStatus) => {
@@ -105,33 +131,43 @@ export function StartFlowProvider({
 
   const selectFile = useCallback(
     (file: File) => {
+      clearUploadTimer();
       setValidationError(null);
 
-      if (!isAcceptedAudioFile(file)) {
-        setValidationError(
-          `지원하지 않는 파일 형식입니다. ${ACCEPTED_AUDIO_EXTENSIONS.join(', ')} 형식만 업로드할 수 있습니다.`,
-        );
+      const validationMessage = validateAudioFile(file);
+      if (validationMessage) {
+        setSelectedFile(null);
+        setProgressPercent(0);
+        setStatusMessage(INITIAL_STATUS_MESSAGE);
+        updateStatus('idle');
+        setValidationError(validationMessage);
         return;
       }
 
       const nextFile = createStartFlowFile(file);
       setSelectedFile(nextFile);
+      setProgressPercent(0);
       setStatusMessage(`「${nextFile.name}」 파일이 선택되었습니다. 분석을 시작할 수 있습니다.`);
       updateStatus('ready');
     },
-    [updateStatus],
+    [clearUploadTimer, updateStatus],
   );
 
   const clearFile = useCallback(() => {
+    clearUploadTimer();
     setSelectedFile(null);
     setValidationError(null);
     setCurrentStage('uploading');
     setProgressPercent(0);
     setStatusMessage(INITIAL_STATUS_MESSAGE);
     updateStatus('idle');
-  }, [updateStatus]);
+  }, [clearUploadTimer, updateStatus]);
 
   const startAnalysis = useCallback(() => {
+    if (status === 'uploading') {
+      return;
+    }
+
     if (!selectedFile) {
       setValidationError('분석을 시작하려면 회의 녹취 파일을 먼저 선택해 주세요.');
       updateStatus('idle');
@@ -140,20 +176,37 @@ export function StartFlowProvider({
 
     setValidationError(null);
     setCurrentStage('uploading');
-    setProgressPercent(15);
+    setProgressPercent(0);
     setStatusMessage('녹취 파일을 업로드하는 중입니다…');
     updateStatus('uploading');
     onAnalysisStart?.(selectedFile);
-  }, [onAnalysisStart, selectedFile, updateStatus]);
+
+    clearUploadTimer();
+    uploadTimerRef.current = setInterval(() => {
+      setProgressPercent((current) => {
+        const next = Math.min(current + 12, 100);
+
+        if (next >= 100) {
+          clearUploadTimer();
+          setStatusMessage('업로드가 완료되었습니다. STT 변환 단계로 이어집니다.');
+        } else {
+          setStatusMessage(`녹취 파일을 업로드하는 중입니다… (${next}%)`);
+        }
+
+        return next;
+      });
+    }, 350);
+  }, [clearUploadTimer, onAnalysisStart, selectedFile, status, updateStatus]);
 
   const reset = useCallback(() => {
+    clearUploadTimer();
     setSelectedFile(null);
     setValidationError(null);
     setCurrentStage('uploading');
     setProgressPercent(0);
     setStatusMessage(INITIAL_STATUS_MESSAGE);
     updateStatus('idle');
-  }, [updateStatus]);
+  }, [clearUploadTimer, updateStatus]);
 
   const value = useMemo<StartFlowContextValue>(
     () => ({
@@ -202,6 +255,14 @@ export function StartFlowMeetingFiles({ className = '' }: StartFlowMeetingFilesP
     event.target.value = '';
   };
 
+  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      selectFile(file);
+    }
+  };
+
   const openFilePicker = () => {
     inputRef.current?.click();
   };
@@ -209,7 +270,11 @@ export function StartFlowMeetingFiles({ className = '' }: StartFlowMeetingFilesP
   const isUploading = status === 'uploading';
 
   return (
-    <div className={`start-flow-meeting-files${className ? ` ${className}` : ''}`}>
+    <div
+      className={`start-flow-meeting-files${className ? ` ${className}` : ''}`}
+      onDragOver={(event) => event.preventDefault()}
+      onDrop={handleDrop}
+    >
       <input
         ref={inputRef}
         id={inputId}
@@ -230,7 +295,7 @@ export function StartFlowMeetingFiles({ className = '' }: StartFlowMeetingFilesP
       <FileListEmptyState
         isEmpty={!selectedFile}
         title="업로드된 파일이 없습니다"
-        description="회의 녹취 파일을 선택하면 목록에 표시됩니다."
+        description="회의 녹취 파일을 선택하거나 이 영역으로 끌어다 놓으세요."
         action={{
           label: '파일 선택',
           onClick: openFilePicker,
@@ -395,4 +460,8 @@ export type {
   StartFlowStatus,
 } from './StartFlow.types';
 
-export { ACCEPTED_AUDIO_EXTENSIONS, START_FLOW_STAGES } from './StartFlow.types';
+export {
+  ACCEPTED_AUDIO_EXTENSIONS,
+  MAX_AUDIO_FILE_SIZE_BYTES,
+  START_FLOW_STAGES,
+} from './StartFlow.types';
