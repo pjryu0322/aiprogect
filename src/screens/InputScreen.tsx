@@ -59,12 +59,15 @@ function InputScreenDefaultLayout() {
   );
 }
 
-export function InputScreenMeetingFiles(props: InputScreenSlotProps) {
+export function InputScreenMeetingFiles({
+  showHeading = false,
+  ...props
+}: InputScreenSlotProps & { showHeading?: boolean }) {
   const { status, files } = useMeetingInputFlow();
   const { isReadingMetadata } = useFileDurations(files);
   const screenStatus = mapFlowStatusToInputScreenStatus(status, isReadingMetadata);
 
-  return <MeetingFilesBlock {...props} screenStatus={screenStatus} />;
+  return <MeetingFilesBlock {...props} screenStatus={screenStatus} showHeading={showHeading} />;
 }
 
 export function InputScreenWorkspace(props: InputScreenSlotProps) {

@@ -23,11 +23,13 @@ import './inputScreen.css';
 
 export interface MeetingFilesBlockProps extends InputScreenSlotProps {
   screenStatus?: 'idle' | 'uploading' | 'ready';
+  showHeading?: boolean;
 }
 
 export function MeetingFilesBlock({
   className = '',
   screenStatus = 'idle',
+  showHeading = true,
 }: MeetingFilesBlockProps) {
   const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -63,12 +65,19 @@ export function MeetingFilesBlock({
   return (
     <section
       className={`input-screen-meeting-files${className ? ` ${className}` : ''}`}
-      aria-labelledby="input-screen-meeting-files-heading"
+      aria-labelledby={showHeading ? 'input-screen-meeting-files-heading' : undefined}
+      aria-label={showHeading ? undefined : '회의 파일'}
     >
       <div className="input-screen-meeting-files-header">
-        <h2 id="input-screen-meeting-files-heading" className="input-screen-section-title">
-          회의 파일
-        </h2>
+        {showHeading ? (
+          <h2 id="input-screen-meeting-files-heading" className="input-screen-section-title">
+            회의 파일
+          </h2>
+        ) : (
+          <span className="visually-hidden" id="input-screen-meeting-files-heading">
+            회의 파일
+          </span>
+        )}
         <span className={getConversionStatusClassName(resolvedStatus)} aria-live="polite">
           {getConversionStatusLabel(resolvedStatus)}
         </span>
