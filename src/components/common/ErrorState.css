@@ -1,0 +1,25 @@
+.error-state {
+  display: flex;
+  width: 100%;
+}
+
+.error-state--block {
+  flex: 1;
+  min-height: 200px;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-state--panel {
+  flex: 1;
+  min-height: 120px;
+  align-items: stretch;
+}
+
+.error-state--inline {
+  align-items: center;
+}
+
+.error-state--timeline {
+  align-items: stretch;
+}
