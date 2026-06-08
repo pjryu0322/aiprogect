@@ -9,6 +9,8 @@ export interface DeniedAction extends StateAction {
   variant?: 'primary' | 'secondary';
 }
 
+export type AccessDeniedState = 'forbidden' | 'unauthorized';
+
 export interface AccessDeniedProps {
   /** Primary message shown when access is forbidden (403). */
   title: string;
@@ -19,6 +21,7 @@ export interface AccessDeniedProps {
   /** Optional secondary call-to-action. */
   secondaryAction?: DeniedAction | ReactNode;
   variant?: AccessDeniedVariant;
+  state?: AccessDeniedState;
   className?: string;
 }
 
@@ -75,35 +78,63 @@ function renderDeniedAction(action: DeniedAction | ReactNode, fallbackVariant: '
   );
 }
 
+function ForbiddenIcon() {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M16 22V18a8 8 0 1 1 16 0v4"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <rect x="12" y="22" width="24" height="18" rx="4" stroke="currentColor" strokeWidth="2" />
+      <path d="M24 28v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function UnauthorizedIcon() {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="24" cy="16" r="7" stroke="currentColor" strokeWidth="2" />
+      <path
+        d="M12 40v-2a12 12 0 0 1 24 0v2"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M32 20l4 4 8-8"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function AccessDenied({
   title,
   description,
   action,
   secondaryAction,
   variant = 'block',
+  state = 'forbidden',
   className = '',
 }: AccessDeniedProps) {
   const hasActions = Boolean(action || secondaryAction);
 
   return (
     <div
-      className={`access-denied access-denied--${variant}${className ? ` ${className}` : ''}`}
+      className={`access-denied access-denied--${state} access-denied--${variant}${className ? ` ${className}` : ''}`}
       role="alert"
       aria-live="polite"
-      data-state="forbidden"
+      data-state={state}
       aria-label={title}
     >
       <div className="access-denied__icon" aria-hidden="true">
-        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M16 22V18a8 8 0 1 1 16 0v4"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-          <rect x="12" y="22" width="24" height="18" rx="4" stroke="currentColor" strokeWidth="2" />
-          <path d="M24 28v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-        </svg>
+        {state === 'forbidden' ? <ForbiddenIcon /> : <UnauthorizedIcon />}
       </div>
 
       <h3 className="access-denied__title">{title}</h3>

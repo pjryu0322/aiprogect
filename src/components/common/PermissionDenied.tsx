@@ -47,12 +47,13 @@ export function PermissionDenied({
   ...rest
 }: PermissionDeniedProps) {
   return (
-    <div
-      className={`permission-denied${className ? ` ${className}` : ''}`}
-      data-state="unauthorized"
-    >
-      <AccessDenied title={title} description={description} {...rest} />
-    </div>
+    <AccessDenied
+      title={title}
+      description={description}
+      state="unauthorized"
+      className={className ? `permission-denied ${className}` : 'permission-denied'}
+      {...rest}
+    />
   );
 }
 
