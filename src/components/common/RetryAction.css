@@ -1,0 +1,12 @@
+.retry-action-loading-failure {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  min-height: 200px;
+  align-items: center;
+  justify-content: center;
+}
+
+.retry-action__button {
+  min-width: 96px;
+}
