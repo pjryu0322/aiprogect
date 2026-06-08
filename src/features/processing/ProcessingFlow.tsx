@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from 'react';
@@ -134,6 +135,7 @@ export function ProcessingFlowProvider({
     getMeetingDataSync(initialScenario),
   );
   const [retrying, setRetrying] = useState(false);
+  const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const meetingData = controlledMeetingData ?? internalMeetingData;
   const phase = resolveProcessingPhase(meetingData);
@@ -156,6 +158,14 @@ export function ProcessingFlowProvider({
   useEffect(() => {
     onPhaseChange?.(phase);
   }, [onPhaseChange, phase]);
+
+  useEffect(() => {
+    return () => {
+      if (retryTimerRef.current) {
+        clearTimeout(retryTimerRef.current);
+      }
+    };
+  }, []);
 
   const setMeetingData = useCallback(
     (data: MeetingData) => {
@@ -183,9 +193,16 @@ export function ProcessingFlowProvider({
   }, [updateMeetingData]);
 
   const retryCurrentStage = useCallback(() => {
+    if (retryTimerRef.current) {
+      clearTimeout(retryTimerRef.current);
+    }
+
     setRetrying(true);
-    updateMeetingData((previous) => applyStageRetry(previous));
-    setRetrying(false);
+    retryTimerRef.current = setTimeout(() => {
+      updateMeetingData((previous) => applyStageRetry(previous));
+      setRetrying(false);
+      retryTimerRef.current = null;
+    }, 500);
   }, [updateMeetingData]);
 
   const reset = useCallback(() => {
