@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useId,
   useMemo,
   useRef,
@@ -120,6 +121,12 @@ export function StartFlowProvider({
       uploadTimerRef.current = null;
     }
   }, []);
+
+  useEffect(() => {
+    return () => {
+      clearUploadTimer();
+    };
+  }, [clearUploadTimer]);
 
   const updateStatus = useCallback(
     (nextStatus: StartFlowStatus) => {
