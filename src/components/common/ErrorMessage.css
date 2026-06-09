@@ -1,0 +1,129 @@
+.error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 16px;
+  border-radius: 8px;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.error-message--panel {
+  flex: 1;
+  min-height: 120px;
+  justify-content: center;
+}
+
+.error-message--inline {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.error-message--timeline {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border-color: #fca5a5;
+  background: #fff;
+}
+
+.error-message__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.error-message--inline .error-message__icon,
+.error-message--timeline .error-message__icon {
+  width: 22px;
+  height: 22px;
+  font-size: 14px;
+}
+
+.error-message__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.error-message__title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.error-message--inline .error-message__title,
+.error-message--timeline .error-message__title {
+  text-align: left;
+}
+
+.error-message__description {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #b91c1c;
+  text-align: center;
+}
+
+.error-message--inline .error-message__description,
+.error-message--timeline .error-message__description {
+  text-align: left;
+}
+
+.error-message__actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.error-message--block .error-message__actions,
+.error-message--panel .error-message__actions {
+  width: 100%;
+  justify-content: center;
+}
+
+.error-message__retry {
+  padding: 8px 14px;
+  border: 1px solid #f87171;
+  border-radius: 8px;
+  background: #fff;
+  color: #b91c1c;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.error-message__retry:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #991b1b;
+}
+
+.error-message__retry:focus-visible {
+  outline: 2px solid #f87171;
+  outline-offset: 2px;
+}
