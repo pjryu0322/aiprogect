@@ -1,0 +1,47 @@
+.access-denied--unauthorized,
+.permission-denied.access-denied {
+  border-color: #fcd34d;
+  background: #fffbeb;
+}
+
+.access-denied--unauthorized .access-denied__icon,
+.permission-denied.access-denied .access-denied__icon {
+  color: #d97706;
+}
+
+.access-denied--unauthorized .access-denied__title,
+.permission-denied.access-denied .access-denied__title {
+  color: #92400e;
+}
+
+.access-denied--unauthorized .access-denied__description,
+.permission-denied.access-denied .access-denied__description {
+  color: #b45309;
+}
+
+.access-denied--unauthorized .access-denied__action--primary,
+.permission-denied.access-denied .access-denied__action--primary {
+  background: #d97706;
+}
+
+.access-denied--unauthorized .access-denied__action--primary:hover,
+.permission-denied.access-denied .access-denied__action--primary:hover {
+  background: #b45309;
+}
+
+.access-denied--unauthorized .access-denied__action--secondary,
+.permission-denied.access-denied .access-denied__action--secondary {
+  border-color: #fcd34d;
+  color: #b45309;
+}
+
+.access-denied--unauthorized .access-denied__action--secondary:hover,
+.permission-denied.access-denied .access-denied__action--secondary:hover {
+  background: #fffbeb;
+  border-color: #fbbf24;
+}
+
+.access-denied--unauthorized .access-denied__action:focus-visible,
+.permission-denied.access-denied .access-denied__action:focus-visible {
+  outline-color: #fcd34d;
+}
