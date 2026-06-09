@@ -1,0 +1,32 @@
+{
+  "id": "meeting-empty",
+  "title": "새 회의",
+  "files": [
+    {
+      "id": "file-uploading-001",
+      "name": "팀-스탠드업-0608.m4a",
+      "sizeBytes": 12456789,
+      "durationSeconds": 1800,
+      "format": "m4a",
+      "uploadedAt": "2026-06-08T10:00:00+09:00"
+    }
+  ],
+  "participants": [],
+  "script": [],
+  "summary": null,
+  "workspaceStatus": {
+    "currentStage": "uploading",
+    "stageStatus": "processing",
+    "progressPercent": 65,
+    "message": "녹취 파일을 업로드하는 중입니다…"
+  },
+  "draftTimeline": [
+    {
+      "id": "tl-upload-01",
+      "stage": "uploading",
+      "status": "processing",
+      "timestamp": "2026-06-08T10:00:05+09:00",
+      "message": "파일 업로드 진행 중 (65%)"
+    }
+  ]
+}

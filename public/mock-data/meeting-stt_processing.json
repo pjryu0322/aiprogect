@@ -1,0 +1,39 @@
+{
+  "id": "meeting-2026-q1-planning",
+  "title": "2026 Q1 제품 기획 회의",
+  "files": [
+    {
+      "id": "file-recording-001",
+      "name": "2026-Q1-제품기획회의.m4a",
+      "sizeBytes": 48234567,
+      "durationSeconds": 3720,
+      "format": "m4a",
+      "uploadedAt": "2026-06-05T09:58:00+09:00"
+    }
+  ],
+  "participants": [],
+  "script": [],
+  "summary": null,
+  "workspaceStatus": {
+    "currentStage": "stt_processing",
+    "stageStatus": "processing",
+    "progressPercent": 40,
+    "message": "음성을 텍스트로 변환하는 중입니다…"
+  },
+  "draftTimeline": [
+    {
+      "id": "tl-stt-01",
+      "stage": "uploading",
+      "status": "success",
+      "timestamp": "2026-06-08T10:00:12+09:00",
+      "message": "녹취 파일 업로드 완료"
+    },
+    {
+      "id": "tl-stt-02",
+      "stage": "stt_processing",
+      "status": "processing",
+      "timestamp": "2026-06-08T10:01:00+09:00",
+      "message": "STT 변환 진행 중 (40%)"
+    }
+  ]
+}
