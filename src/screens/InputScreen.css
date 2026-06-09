@@ -1,0 +1,54 @@
+.input-screen-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.input-screen-layout--preview {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 0;
+  min-height: 480px;
+  border: 1px solid #e2e5ea;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.input-screen-layout__left {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  overflow-y: auto;
+  border-right: 1px solid #e2e5ea;
+  background: #fff;
+}
+
+.input-screen-layout__center {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: #fafbfc;
+}
+
+.input-screen-layout__workspace {
+  flex: 1;
+  min-height: 0;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+@media (max-width: 900px) {
+  .input-screen-layout--preview {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .input-screen-layout__left {
+    border-right: none;
+    border-bottom: 1px solid #e2e5ea;
+  }
+}
