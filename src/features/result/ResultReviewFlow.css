@@ -1,0 +1,243 @@
+.result-review-flow {
+  gap: 12px;
+}
+
+.result-review-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.result-review-summary__overview {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.result-review-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.result-review-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+.result-review-card__title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d4ed8;
+  letter-spacing: 0.01em;
+}
+
+.result-review-card__list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.result-review-card__list--actions {
+  list-style: none;
+  padding-left: 0;
+}
+
+.result-review-card__item {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #374151;
+}
+
+.result-review-card__action-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #f9fafb;
+}
+
+.result-review-card__action-task {
+  font-size: 13px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.result-review-card__action-meta {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.result-review-card__empty {
+  margin: 0;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.result-review-script {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.result-review-script__segment {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+.result-review-script__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.result-review-script__speaker {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d4ed8;
+}
+
+.result-review-script__time {
+  font-size: 11px;
+  color: #9ca3af;
+  font-variant-numeric: tabular-nums;
+}
+
+.result-review-script__text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #374151;
+}
+
+.result-review-timeline__empty {
+  margin: 0;
+  padding: 12px;
+  font-size: 12px;
+  color: #9ca3af;
+  text-align: center;
+}
+
+.result-review-timeline__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.result-review-timeline__entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.result-review-timeline__entry--processing {
+  padding: 8px;
+  margin: -8px;
+  border-radius: 8px;
+  background: #eff6ff;
+}
+
+.result-review-timeline__indicator {
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.result-review-timeline__dot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d1d5db;
+}
+
+.result-review-timeline__dot--success {
+  background: #22c55e;
+}
+
+.result-review-timeline__dot--error {
+  background: #ef4444;
+}
+
+.result-review-timeline__dot--processing {
+  background: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  animation: result-review-pulse 1.2s ease-in-out infinite;
+}
+
+.result-review-timeline__dot--idle {
+  background: #d1d5db;
+}
+
+@keyframes result-review-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.result-review-timeline__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.result-review-timeline__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.result-review-timeline__stage {
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.result-review-timeline__timestamp {
+  font-size: 11px;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+.result-review-timeline__message {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #6b7280;
+}
+
+.result-review-flow__hint {
+  margin: 0;
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #6b7280;
+  border-radius: 6px;
+  background: #f3f4f6;
+}
