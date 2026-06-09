@@ -1,0 +1,20 @@
+{
+  "scenarios": [
+    "idle",
+    "uploading",
+    "stt_processing",
+    "speaker_waiting",
+    "draft_pending",
+    "success"
+  ],
+  "defaultScenario": "success",
+  "paths": {
+    "idle": "/mock-data/meeting-idle.json",
+    "uploading": "/mock-data/meeting-uploading.json",
+    "stt_processing": "/mock-data/meeting-stt_processing.json",
+    "speaker_waiting": "/mock-data/meeting-speaker_waiting.json",
+    "draft_pending": "/mock-data/meeting-draft_pending.json",
+    "success": "/mock-data/meeting-success.json"
+  },
+  "description": "회의 워크스페이스 샘플 데이터 시나리오 목록"
+}
