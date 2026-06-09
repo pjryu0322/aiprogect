@@ -1,0 +1,208 @@
+.input-screen-file-picker {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.input-screen-section-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.input-screen-meeting-files {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-screen-meeting-files-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.input-screen-meeting-files-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-screen-validation {
+  margin-bottom: 4px;
+}
+
+.input-screen-file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.input-screen-file-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+.input-screen-file-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.input-screen-file-name {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.input-screen-file-detail,
+.input-screen-file-status {
+  margin: 0;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.input-screen-file-status {
+  color: #6b7280;
+}
+
+.input-screen-file-remove {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  color: #6b7280;
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.input-screen-file-remove:hover {
+  background: #f9fafb;
+  color: #374151;
+}
+
+.input-screen-file-actions {
+  margin-top: 4px;
+}
+
+.input-screen-secondary-btn {
+  width: 100%;
+  padding: 8px 16px;
+  border: 1px dashed #93c5fd;
+  border-radius: 8px;
+  background: #fff;
+  color: #1d4ed8;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.input-screen-secondary-btn:hover {
+  background: #eff6ff;
+}
+
+.input-screen-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.input-screen-status--idle {
+  color: #6b7280;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+}
+
+.input-screen-status--uploading {
+  color: #1d4ed8;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
+.input-screen-status--ready {
+  color: #15803d;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+}
+
+.input-screen-workspace {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.input-screen-workspace-canvas {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+}
+
+.input-screen-input-bar {
+  flex-shrink: 0;
+}
+
+.input-screen-input-bar-inner {
+  border-top: none;
+}
+
+@media (max-width: 900px) {
+  .input-screen-file-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .input-screen-file-remove,
+  .input-screen-secondary-btn {
+    min-height: 40px;
+  }
+
+  .input-screen-meeting-files-header {
+    flex-wrap: wrap;
+  }
+}
