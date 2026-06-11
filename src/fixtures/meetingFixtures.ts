@@ -1,4 +1,13 @@
 import { getMeetingDataSync } from '../data/meetingDataProvider';
+import {
+  sampleActionItems,
+  sampleDecisions,
+  sampleDraftTimeline,
+  sampleMeetingFiles,
+  sampleMeetingSummary,
+  sampleParticipants,
+  sampleTranscriptSegments,
+} from '../data/sampleData';
 import type { MeetingData, SampleScenario } from '../data/types';
 
 export const FIXTURE_SCENARIOS: SampleScenario[] = [
@@ -38,5 +47,27 @@ export function assertMeetingDataShape(data: MeetingData): boolean {
     (data.summary === null || typeof data.summary === 'object') &&
     typeof data.workspaceStatus === 'object' &&
     Array.isArray(data.draftTimeline)
+  );
+}
+
+export function assertSampleDataExports(): boolean {
+  return (
+    sampleMeetingFiles.length > 0 &&
+    sampleParticipants.length > 0 &&
+    sampleTranscriptSegments.length > 0 &&
+    sampleMeetingSummary.decisions.length === sampleDecisions.length &&
+    sampleMeetingSummary.actionItems.length === sampleActionItems.length &&
+    sampleDraftTimeline.length > 0
+  );
+}
+
+export function assertSuccessFixtureMatchesSampleData(): boolean {
+  const success = createMeetingFixture('success');
+  return (
+    success.files.length === sampleMeetingFiles.length &&
+    success.participants.length === sampleParticipants.length &&
+    success.script.length === sampleTranscriptSegments.length &&
+    success.summary?.title === sampleMeetingSummary.title &&
+    success.draftTimeline.length === sampleDraftTimeline.length
   );
 }

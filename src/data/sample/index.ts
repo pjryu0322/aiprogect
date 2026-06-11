@@ -2,6 +2,15 @@ import type { MeetingData, SampleScenario } from '../types';
 import { meetingIdle } from './meetingIdle';
 import { meetingSuccess } from './meetingSuccess';
 
+export {
+  sampleActionItems,
+  sampleDecisions,
+  sampleDraftTimeline,
+  sampleMeetingFiles,
+  sampleMeetingSummary,
+  sampleParticipants,
+  sampleTranscriptSegments,
+} from '../sampleData';
 export { meetingIdle } from './meetingIdle';
 export { meetingSuccess } from './meetingSuccess';
 
@@ -71,12 +80,13 @@ const SAMPLE_REGISTRY: Record<SampleScenario, MeetingData> = {
       { id: 'p-02', name: '화자 2', role: '미확인', speakerLabel: '화자 2' },
       { id: 'p-03', name: '화자 3', role: '미확인', speakerLabel: '화자 3' },
     ],
-    script: meetingSuccess.script.map((seg) => ({
-      ...seg,
-      speakerName:
-        meetingSuccess.participants.find((p) => p.id === seg.speakerId)?.speakerLabel ??
-        seg.speakerName,
-    })),
+    script: meetingSuccess.script.map((seg) => {
+      const participant = meetingSuccess.participants.find((p) => p.id === seg.speakerId);
+      return {
+        ...seg,
+        speakerName: participant?.speakerLabel ?? seg.speakerName,
+      };
+    }),
     summary: null,
     workspaceStatus: {
       currentStage: 'speaker_waiting',

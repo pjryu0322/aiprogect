@@ -1,4 +1,5 @@
 import type { MeetingData } from '../types';
+import { sampleWorkspaceStatusIdle } from '../sampleData';
 
 export const meetingIdle: MeetingData = {
   id: 'meeting-empty',
@@ -7,11 +8,6 @@ export const meetingIdle: MeetingData = {
   participants: [],
   script: [],
   summary: null,
-  workspaceStatus: {
-    currentStage: 'uploading',
-    stageStatus: 'idle',
-    progressPercent: 0,
-    message: '회의 녹취 파일을 업로드해 주세요.',
-  },
+  workspaceStatus: sampleWorkspaceStatusIdle,
   draftTimeline: [],
 };
