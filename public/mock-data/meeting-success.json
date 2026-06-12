@@ -1,0 +1,160 @@
+{
+  "id": "meeting-2026-q1-planning",
+  "title": "2026 Q1 제품 기획 회의",
+  "files": [
+    {
+      "id": "file-recording-001",
+      "name": "2026-Q1-제품기획회의.m4a",
+      "sizeBytes": 48234567,
+      "durationSeconds": 3720,
+      "format": "m4a",
+      "uploadedAt": "2026-06-05T09:58:00+09:00"
+    }
+  ],
+  "participants": [
+    {
+      "id": "p-01",
+      "name": "김민수",
+      "role": "PM",
+      "speakerLabel": "화자 1"
+    },
+    {
+      "id": "p-02",
+      "name": "이지현",
+      "role": "디자인 리드",
+      "speakerLabel": "화자 2"
+    },
+    {
+      "id": "p-03",
+      "name": "박준영",
+      "role": "엔지니어링 리드",
+      "speakerLabel": "화자 3"
+    },
+    {
+      "id": "p-04",
+      "name": "최서연",
+      "role": "데이터 분석",
+      "speakerLabel": "화자 4"
+    }
+  ],
+  "script": [
+    {
+      "id": "seg-001",
+      "speakerId": "p-01",
+      "speakerName": "김민수",
+      "startSeconds": 0,
+      "endSeconds": 42,
+      "text": "오늘은 Q1 제품 로드맵과 우선순위를 확정하는 회의입니다. 먼저 지난 분기 회고부터 시작하겠습니다."
+    },
+    {
+      "id": "seg-002",
+      "speakerId": "p-02",
+      "speakerName": "이지현",
+      "startSeconds": 43,
+      "endSeconds": 98,
+      "text": "디자인 측면에서는 온보딩 플로우 개선이 가장 큰 성과였습니다. 다만 모바일 접근성 이슈가 아직 남아 있습니다."
+    },
+    {
+      "id": "seg-003",
+      "speakerId": "p-03",
+      "speakerName": "박준영",
+      "startSeconds": 99,
+      "endSeconds": 165,
+      "text": "STT 파이프라인 지연 문제는 캐시 레이어 도입으로 완화했습니다. Q1에는 화자 분리 정확도 개선에 집중하겠습니다."
+    },
+    {
+      "id": "seg-004",
+      "speakerId": "p-04",
+      "speakerName": "최서연",
+      "startSeconds": 166,
+      "endSeconds": 228,
+      "text": "사용자 리텐션 데이터를 보면 회의록 요약 기능 사용 후 2주차 재방문율이 18% 상승했습니다."
+    },
+    {
+      "id": "seg-005",
+      "speakerId": "p-01",
+      "speakerName": "김민수",
+      "startSeconds": 229,
+      "endSeconds": 310,
+      "text": "그럼 Q1 핵심 목표는 화자 분리 정확도 90% 달성, 요약 품질 A/B 테스트, 모바일 워크스페이스 출시로 정리하겠습니다."
+    }
+  ],
+  "summary": {
+    "title": "2026 Q1 제품 기획 회의 요약",
+    "overview": "팀은 Q1 제품 로드맵을 확정했으며, 화자 분리 정확도 개선과 모바일 워크스페이스 출시를 최우선 과제로 설정했습니다. 회의록 요약 기능이 사용자 재방문율에 긍정적 영향을 미친 것으로 확인되었습니다.",
+    "keyPoints": [
+      "온보딩 플로우 개선이 지난 분기 핵심 성과",
+      "STT 파이프라인 지연은 캐시 레이어로 완화",
+      "요약 기능 사용 후 2주차 재방문율 18% 상승",
+      "Q1 목표: 화자 분리 정확도 90%, 모바일 워크스페이스 출시"
+    ],
+    "decisions": [
+      "Q1 최우선 과제로 화자 분리 정확도 개선 채택",
+      "요약 품질 A/B 테스트 6월 중 착수",
+      "모바일 워크스페이스 베타 7월 말 출시 목표 확정"
+    ],
+    "actionItems": [
+      {
+        "id": "ai-01",
+        "assignee": "박준영",
+        "task": "화자 분리 모델 개선 POC 작성",
+        "dueDate": "2026-06-20"
+      },
+      {
+        "id": "ai-02",
+        "assignee": "이지현",
+        "task": "모바일 워크스페이스 와이어프레임 공유",
+        "dueDate": "2026-06-15"
+      },
+      {
+        "id": "ai-03",
+        "assignee": "최서연",
+        "task": "요약 A/B 테스트 지표 정의",
+        "dueDate": "2026-06-18"
+      }
+    ]
+  },
+  "workspaceStatus": {
+    "currentStage": "complete",
+    "stageStatus": "success",
+    "progressPercent": 100,
+    "message": "회의록 초안과 요약이 생성되었습니다."
+  },
+  "draftTimeline": [
+    {
+      "id": "tl-01",
+      "stage": "uploading",
+      "status": "success",
+      "timestamp": "2026-06-05T10:00:12+09:00",
+      "message": "녹취 파일 업로드 완료"
+    },
+    {
+      "id": "tl-02",
+      "stage": "stt_processing",
+      "status": "success",
+      "timestamp": "2026-06-05T10:02:45+09:00",
+      "message": "STT 변환 완료 (62분 소요)"
+    },
+    {
+      "id": "tl-03",
+      "stage": "speaker_waiting",
+      "status": "success",
+      "timestamp": "2026-06-05T10:05:30+09:00",
+      "message": "화자 4명 분리 완료"
+    },
+    {
+      "id": "tl-04",
+      "stage": "draft_pending",
+      "status": "success",
+      "timestamp": "2026-06-05T10:08:15+09:00",
+      "message": "회의록 초안 생성 완료"
+    },
+    {
+      "id": "tl-05",
+      "stage": "summary",
+      "status": "success",
+      "timestamp": "2026-06-05T10:09:02+09:00",
+      "message": "요약본 생성 완료"
+    }
+  ]
+}
