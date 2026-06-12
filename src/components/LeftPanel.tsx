@@ -1,3 +1,4 @@
+import { sampleMeetingFiles } from '../data/sampleData';
 export function LeftPanel() {
   return (
     <div className="panel-content">
@@ -6,7 +7,7 @@ export function LeftPanel() {
           회의 파일
         </h2>
         <div className="panel-section-body panel-placeholder">
-          <p className="panel-placeholder-text">업로드된 회의 녹취 파일이 여기에 표시됩니다.</p>
+          <ul className="sample-meeting-files">{sampleMeetingFiles.map((file) => (<li key={file.id}>{file.name} · {file.duration}</li>))}</ul>
         </div>
       </section>
 
@@ -15,7 +16,7 @@ export function LeftPanel() {
           참여자
         </h2>
         <div className="panel-section-body panel-placeholder">
-          <p className="panel-placeholder-text">회의 참여자 목록이 여기에 표시됩니다.</p>
+          <ul className="sample-meeting-files">{sampleMeetingFiles.map((file) => (<li key={file.id}>{file.name} · {file.duration}</li>))}</ul>
         </div>
       </section>
     </div>
