@@ -1,3 +1,4 @@
+import { sampleTranscriptSegments } from '../data/sampleData';
 export function CenterPanel() {
   return (
     <div className="panel-content panel-content--center">
@@ -6,9 +7,7 @@ export function CenterPanel() {
           작업 공간
         </h2>
         <div className="workspace-canvas panel-placeholder">
-          <p className="panel-placeholder-text">
-            업로드, 변환, 화자 분리, 초안 생성 진행 상태와 작업 내용이 여기에 표시됩니다.
-          </p>
+          <ul className="sample-transcript">{sampleTranscriptSegments.map((seg) => (<li key={seg.id}><strong>{seg.speakerName}</strong> [{seg.timestamp}] {seg.text}</li>))}</ul>
         </div>
       </section>
 
