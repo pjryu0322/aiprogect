@@ -1,3 +1,4 @@
+import { sampleMeetingSummary, sampleDecisions, sampleActionItems } from '../data/sampleData';
 import { useState } from 'react';
 
 type ResultTab = 'summary' | 'script';
@@ -33,11 +34,7 @@ export function RightPanel() {
         </div>
 
         <div className="result-tab-panel panel-placeholder" role="tabpanel">
-          <p className="panel-placeholder-text">
-            {activeTab === 'summary'
-              ? '회의록 요약이 여기에 표시됩니다.'
-              : '전체 스크립트가 여기에 표시됩니다.'}
-          </p>
+          <div className="sample-summary"><h4>{sampleMeetingSummary.title}</h4><p>{sampleMeetingSummary.overview}</p><ul>{sampleMeetingSummary.keyPoints.map((point, i) => (<li key={i}>{point}</li>))}</ul><h5>결정</h5><ul>{sampleDecisions.map((d) => (<li key={d.id}>{d.text}</li>))}</ul><h5>할 일</h5><ul>{sampleActionItems.map((a) => (<li key={a.id}>{a.task}</li>))}</ul></div>
         </div>
       </section>
 
@@ -46,7 +43,7 @@ export function RightPanel() {
           초안 생성 타임라인
         </h2>
         <div className="timeline-body panel-placeholder">
-          <p className="panel-placeholder-text">초안 생성 단계별 진행 이력이 여기에 표시됩니다.</p>
+          <div className="sample-summary"><h4>{sampleMeetingSummary.title}</h4><p>{sampleMeetingSummary.overview}</p><ul>{sampleMeetingSummary.keyPoints.map((point, i) => (<li key={i}>{point}</li>))}</ul><h5>결정</h5><ul>{sampleDecisions.map((d) => (<li key={d.id}>{d.text}</li>))}</ul><h5>할 일</h5><ul>{sampleActionItems.map((a) => (<li key={a.id}>{a.task}</li>))}</ul></div>
         </div>
       </section>
     </div>
