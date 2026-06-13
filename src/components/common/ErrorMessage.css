@@ -118,30 +118,9 @@
 .error-message__retry-btn {
   flex-shrink: 0;
   margin-top: 4px;
-  padding: 8px 16px;
-  border-radius: var(--radius-md, 10px);
-  background: var(--color-error, #dc2626);
-  color: #fff;
-  font-size: 12px;
-  font-weight: 600;
-  transition: opacity 0.15s, background 0.15s;
 }
 
 .error-message--inline .error-message__retry-btn,
 .error-message--chip .error-message__retry-btn {
   margin-top: 0;
-  padding: 6px 12px;
-}
-
-.error-message__retry-btn:hover:not(:disabled) {
-  opacity: 0.9;
-}
-
-.error-message__retry-btn:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
-.error-message--retrying .error-message__retry-btn {
-  background: var(--color-error-text-muted, #b91c1c);
 }
