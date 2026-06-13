@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useReducer } from "react";
-import { CONVERSION_STEPS, type ConversionStepId } from "../../components/WorkspaceShell.types";
+import { useCallback, useMemo, useReducer, useRef } from "react";
+import { type ConversionStepId } from "../../components/WorkspaceShell.types";
 import type { DraftTimelineEvent, DraftTimelineStatus } from "../../types/meeting";
 import type {
   ProcessingFlowError,
@@ -9,19 +9,29 @@ import type {
   ProcessingFlowViewModel,
   UseProcessingFlowOptions,
 } from "./ProcessingFlow.types";
+import {
+  getProcessingFlowStepDisplayStatus,
+  type ProcessingFlowStepDisplayStatus,
+} from "./ProcessingFlow.types";
 
 export type {
   ProcessingFlowCallbacks,
   ProcessingFlowConversionStepsProps,
+  ProcessingFlowActiveStepChipProps,
   ProcessingFlowDraftTimelineProps,
   ProcessingFlowError,
   ProcessingFlowProps,
   ProcessingFlowStage,
   ProcessingFlowState,
   ProcessingFlowStatus,
+  ProcessingFlowStepDisplayStatus,
   ProcessingFlowViewModel,
   ProcessingFlowWorkspaceProps,
   UseProcessingFlowOptions,
+} from "./ProcessingFlow.types";
+
+export {
+  getProcessingFlowStepDisplayStatus,
 } from "./ProcessingFlow.types";
 
 const PROCESSING_STAGES: ProcessingFlowStage[] = [
@@ -69,6 +79,12 @@ type ProcessingFlowAction =
 
 function isProcessingStage(status: ProcessingFlowStatus): status is ProcessingFlowStage {
   return PROCESSING_STAGES.includes(status as ProcessingFlowStage);
+}
+
+export function isProcessingFlowStage(
+  status: ProcessingFlowStatus
+): status is ProcessingFlowStage {
+  return isProcessingStage(status);
 }
 
 function createInitialState(initialStatus: ProcessingFlowStatus = "uploading"): ProcessingFlowState {
@@ -245,6 +261,7 @@ export function buildProcessingFlowViewModel(
 
   return {
     status: state.status,
+    activeStage: isProcessing ? state.status : null,
     activeConversionStep: resolveActiveConversionStep(
       state.status,
       state.error?.stage
@@ -331,25 +348,13 @@ function processingFlowReducer(
 export function getConversionStepDisplayStatus(
   stepId: ConversionStepId,
   activeStep: ConversionStepId,
-  isSuccess = false
-): "done" | "active" | "pending" {
-  if (isSuccess) {
-    return "done";
-  }
-
-  const stepOrder = CONVERSION_STEPS.map((step) => step.id);
-  const activeIndex = stepOrder.indexOf(activeStep);
-  const stepIndex = stepOrder.indexOf(stepId);
-
-  if (stepIndex < activeIndex) {
-    return "done";
-  }
-
-  if (stepIndex === activeIndex) {
-    return "active";
-  }
-
-  return "pending";
+  isSuccess = false,
+  errorStep: ProcessingFlowStage | null = null
+): ProcessingFlowStepDisplayStatus {
+  return getProcessingFlowStepDisplayStatus(stepId, activeStep, {
+    isSuccess,
+    errorStep,
+  });
 }
 
 export function useProcessingFlow(options: UseProcessingFlowOptions = {}) {
@@ -366,6 +371,7 @@ export function useProcessingFlow(options: UseProcessingFlowOptions = {}) {
     initialStatus,
     createInitialState
   );
+  const initialStatusRef = useRef(initialStatus);
 
   const viewModel = useMemo(() => buildProcessingFlowViewModel(state), [state]);
 
@@ -425,10 +431,10 @@ export function useProcessingFlow(options: UseProcessingFlowOptions = {}) {
   }, [state.error?.stage, onRetry]);
 
   const reset = useCallback(
-    (status: ProcessingFlowStatus = initialStatus) => {
+    (status: ProcessingFlowStatus = initialStatusRef.current) => {
       dispatch({ type: "RESET", initialStatus: status });
     },
-    [initialStatus]
+    []
   );
 
   return {
@@ -446,6 +452,7 @@ export function useProcessingFlow(options: UseProcessingFlowOptions = {}) {
 
 export {
   ProcessingFlow,
+  ProcessingFlowActiveStepChip,
   ProcessingFlowConversionSteps,
   ProcessingFlowDraftTimeline,
   ProcessingFlowWorkspace,

@@ -1,4 +1,7 @@
-import type { ConversionStepId } from "../../components/WorkspaceShell.types";
+import {
+  CONVERSION_STEPS,
+  type ConversionStepId,
+} from "../../components/WorkspaceShell.types";
 import type { DraftTimelineEvent, ProcessingStage } from "../../types/meeting";
 
 export type ProcessingFlowStatus = ProcessingStage;
@@ -7,6 +10,38 @@ export type ProcessingFlowStage = Extract<
   ProcessingFlowStatus,
   "uploading" | "stt_processing" | "speaker_waiting" | "draft_pending"
 >;
+
+export type ProcessingFlowStepDisplayStatus = "done" | "active" | "pending" | "error";
+
+export function getProcessingFlowStepDisplayStatus(
+  stepId: ConversionStepId,
+  activeStep: ConversionStepId,
+  options: { isSuccess?: boolean; errorStep?: ProcessingFlowStage | null } = {}
+): ProcessingFlowStepDisplayStatus {
+  const { isSuccess = false, errorStep = null } = options;
+
+  if (isSuccess) {
+    return "done";
+  }
+
+  if (errorStep && stepId === errorStep) {
+    return "error";
+  }
+
+  const stepOrder = CONVERSION_STEPS.map((step) => step.id);
+  const activeIndex = stepOrder.indexOf(activeStep);
+  const stepIndex = stepOrder.indexOf(stepId);
+
+  if (stepIndex < activeIndex) {
+    return "done";
+  }
+
+  if (stepIndex === activeIndex) {
+    return "active";
+  }
+
+  return "pending";
+}
 
 export interface ProcessingFlowError {
   stage: ProcessingFlowStage;
@@ -36,6 +71,7 @@ export interface UseProcessingFlowOptions extends ProcessingFlowCallbacks {
 
 export interface ProcessingFlowViewModel {
   status: ProcessingFlowStatus;
+  activeStage: ProcessingFlowStage | null;
   activeConversionStep: ConversionStepId;
   progress: number | null;
   message: string;
@@ -51,6 +87,12 @@ export interface ProcessingFlowViewModel {
 export interface ProcessingFlowConversionStepsProps {
   activeStep: ConversionStepId;
   isSuccess?: boolean;
+  errorStep?: ProcessingFlowStage | null;
+  className?: string;
+}
+
+export interface ProcessingFlowActiveStepChipProps {
+  viewModel: ProcessingFlowViewModel;
   className?: string;
 }
 
