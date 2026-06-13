@@ -1,0 +1,96 @@
+.no-result-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  color: var(--color-text-muted, #5c6b7f);
+}
+
+.no-result-state__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-text-muted, #5c6b7f);
+}
+
+.no-result-state__icon-svg {
+  width: 28px;
+  height: 28px;
+}
+
+.no-result-state--panel {
+  padding: 24px 20px;
+  border: 1px dashed var(--color-border, #dde2ea);
+  border-radius: var(--radius-md, 10px);
+  background: var(--color-surface, #ffffff);
+}
+
+.no-result-state--inline {
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px dashed var(--color-border, #dde2ea);
+  border-radius: var(--radius-md, 10px);
+  background: var(--color-surface, #ffffff);
+  text-align: left;
+}
+
+.no-result-state--inline .no-result-state__icon-svg {
+  width: 20px;
+  height: 20px;
+}
+
+.no-result-state__content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.no-result-state--panel .no-result-state__content {
+  align-items: center;
+}
+
+.no-result-state__title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text, #1a2332);
+  line-height: 1.5;
+}
+
+.no-result-state__description {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.no-result-state__action-btn {
+  flex-shrink: 0;
+  margin-top: 4px;
+  padding: 8px 16px;
+  border-radius: var(--radius-md, 10px);
+  border: 1px solid var(--color-border, #dde2ea);
+  background: var(--color-surface-muted, #f0f2f6);
+  color: var(--color-text, #1a2332);
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.no-result-state--inline .no-result-state__action-btn {
+  margin-top: 6px;
+  align-self: flex-start;
+}
+
+.no-result-state__action-btn:hover {
+  background: var(--color-surface, #ffffff);
+  border-color: var(--color-primary, #2563eb);
+  color: var(--color-primary, #2563eb);
+}
