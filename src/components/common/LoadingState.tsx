@@ -14,6 +14,10 @@ export const LOADING_PHASE_MESSAGES = {
 
 export type LoadingPhase = keyof typeof LOADING_PHASE_MESSAGES;
 
+export function getLoadingPhaseMessage(phase: LoadingPhase): string {
+  return LOADING_PHASE_MESSAGES[phase];
+}
+
 export interface SpinnerProps {
   size?: LoadingStateSize;
   label?: string;
@@ -37,6 +41,7 @@ export function Spinner({ size = "md", label, className }: SpinnerProps) {
 
 export interface LoadingStateProps {
   loading: boolean;
+  phase?: LoadingPhase;
   message?: string;
   subMessage?: string;
   time?: string;
@@ -50,6 +55,7 @@ export interface LoadingStateProps {
 
 export function LoadingState({
   loading,
+  phase,
   message,
   subMessage,
   time,
@@ -61,6 +67,7 @@ export function LoadingState({
   onComplete,
 }: LoadingStateProps) {
   const wasLoading = useRef(loading);
+  const resolvedMessage = message ?? (phase ? LOADING_PHASE_MESSAGES[phase] : undefined);
 
   useEffect(() => {
     if (wasLoading.current && !loading) {
@@ -73,7 +80,7 @@ export function LoadingState({
     return children ? <>{children}</> : null;
   }
 
-  const statusLabel = label ?? message ?? "처리 중";
+  const statusLabel = label ?? resolvedMessage ?? "처리 중";
   const rootClass = ["loading-state", `loading-state--${variant}`, className]
     .filter(Boolean)
     .join(" ");
@@ -87,7 +94,9 @@ export function LoadingState({
         aria-live="polite"
       >
         <Spinner size="sm" label={statusLabel} />
-        {message ? <span className="loading-state__text">{message}</span> : null}
+        {resolvedMessage ? (
+          <span className="loading-state__text">{resolvedMessage}</span>
+        ) : null}
       </span>
     );
   }
@@ -104,7 +113,9 @@ export function LoadingState({
       >
         <span className="loading-state__timeline-dot" aria-hidden="true" />
         <div className="loading-state__timeline-content">
-          {message ? <div className="loading-state__text">{message}</div> : null}
+          {resolvedMessage ? (
+            <div className="loading-state__text">{resolvedMessage}</div>
+          ) : null}
           <div className="loading-state__subtext">{timelineSubtext}</div>
         </div>
         <span className="sr-only">{statusLabel}</span>
@@ -121,7 +132,9 @@ export function LoadingState({
         aria-live="polite"
       >
         <Spinner size={size} label={statusLabel} />
-        {message ? <span className="loading-state__text">{message}</span> : null}
+        {resolvedMessage ? (
+          <span className="loading-state__text">{resolvedMessage}</span>
+        ) : null}
       </div>
     );
   }
@@ -134,7 +147,9 @@ export function LoadingState({
       aria-live="polite"
     >
       <Spinner size={size} label={statusLabel} />
-      {message ? <p className="loading-state__message">{message}</p> : null}
+      {resolvedMessage ? (
+        <p className="loading-state__message">{resolvedMessage}</p>
+      ) : null}
     </div>
   );
 }
