@@ -1,0 +1,119 @@
+.loading-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.loading-spinner__ring {
+  display: block;
+  border-radius: 50%;
+  border: 2px solid var(--color-border, #dde2ea);
+  border-top-color: var(--color-primary, #2563eb);
+  animation: loading-spinner-spin 0.75s linear infinite;
+}
+
+.loading-spinner--sm .loading-spinner__ring {
+  width: 14px;
+  height: 14px;
+  border-width: 2px;
+}
+
+.loading-spinner--md .loading-spinner__ring {
+  width: 22px;
+  height: 22px;
+  border-width: 2px;
+}
+
+.loading-spinner--lg .loading-spinner__ring {
+  width: 32px;
+  height: 32px;
+  border-width: 3px;
+}
+
+@keyframes loading-spinner-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.loading-state--panel {
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px 20px;
+  border: 1px dashed var(--color-border, #dde2ea);
+  border-radius: var(--radius-md, 10px);
+  background: var(--color-surface-muted, #f0f2f6);
+  text-align: center;
+}
+
+.loading-state--inline {
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.loading-state--chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.loading-state--timeline {
+  display: flex;
+  gap: 10px;
+  padding: 8px 0;
+  position: relative;
+}
+
+.loading-state__message {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text, #1a2332);
+  line-height: 1.5;
+}
+
+.loading-state__text {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text, #1a2332);
+}
+
+.loading-state__subtext {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--color-text-muted, #5c6b7f);
+}
+
+.loading-state__timeline-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid var(--color-primary, #2563eb);
+  background: var(--color-primary, #2563eb);
+  flex-shrink: 0;
+  margin-top: 3px;
+  animation: loading-state-pulse 1.4s ease-in-out infinite;
+}
+
+.loading-state__timeline-content {
+  flex: 1;
+  min-width: 0;
+}
+
+@keyframes loading-state-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
