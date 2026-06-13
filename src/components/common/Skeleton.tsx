@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import "./Skeleton.css";
 
-export type SkeletonVariant = "text" | "block" | "circle";
+export type SkeletonVariant = "text" | "block" | "circle" | "panel";
 
 export interface SkeletonProps {
   loading?: boolean;
@@ -61,8 +61,10 @@ export function Skeleton({
     );
   }
 
+  const Tag = variant === "panel" ? "div" : "span";
+
   return (
-    <span
+    <Tag
       className={`skeleton skeleton--${variant}${
         className ? ` ${className}` : ""
       }`}
@@ -72,6 +74,6 @@ export function Skeleton({
       aria-label={label}
     >
       <span className="sr-only">{label}</span>
-    </span>
+    </Tag>
   );
 }

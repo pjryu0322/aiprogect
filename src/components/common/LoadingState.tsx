@@ -5,6 +5,15 @@ export type LoadingStateSize = "sm" | "md" | "lg";
 
 export type LoadingStateVariant = "panel" | "inline" | "chip" | "timeline";
 
+export const LOADING_PHASE_MESSAGES = {
+  uploading: "파일 업로드 중...",
+  stt_processing: "STT 변환 중...",
+  speaker_waiting: "화자 분리 중...",
+  draft_pending: "초안 생성 중...",
+} as const;
+
+export type LoadingPhase = keyof typeof LOADING_PHASE_MESSAGES;
+
 export interface SpinnerProps {
   size?: LoadingStateSize;
   label?: string;
@@ -29,6 +38,8 @@ export function Spinner({ size = "md", label, className }: SpinnerProps) {
 export interface LoadingStateProps {
   loading: boolean;
   message?: string;
+  subMessage?: string;
+  time?: string;
   label?: string;
   variant?: LoadingStateVariant;
   size?: LoadingStateSize;
@@ -40,6 +51,8 @@ export interface LoadingStateProps {
 export function LoadingState({
   loading,
   message,
+  subMessage,
+  time,
   label,
   variant = "panel",
   size = "md",
@@ -80,6 +93,8 @@ export function LoadingState({
   }
 
   if (variant === "timeline") {
+    const timelineSubtext = subMessage ?? time ?? "진행 중...";
+
     return (
       <div
         className={rootClass}
@@ -90,7 +105,7 @@ export function LoadingState({
         <span className="loading-state__timeline-dot" aria-hidden="true" />
         <div className="loading-state__timeline-content">
           {message ? <div className="loading-state__text">{message}</div> : null}
-          <div className="loading-state__subtext">진행 중...</div>
+          <div className="loading-state__subtext">{timelineSubtext}</div>
         </div>
         <span className="sr-only">{statusLabel}</span>
       </div>
