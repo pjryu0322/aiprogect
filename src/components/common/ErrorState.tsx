@@ -4,6 +4,10 @@ import {
   type ErrorMessageVariant,
 } from "./ErrorMessage";
 
+export type { ErrorMessageVariant as ErrorStateVariant };
+
+const DEFAULT_ERROR_MESSAGE = "오류가 발생했습니다";
+
 export interface ErrorStateProps {
   hasError: boolean;
   message?: string;
@@ -31,13 +35,9 @@ export function ErrorState({
     return children ? <>{children}</> : null;
   }
 
-  if (!message) {
-    return null;
-  }
-
   return (
     <ErrorMessage
-      message={message}
+      message={message ?? DEFAULT_ERROR_MESSAGE}
       description={description}
       variant={variant}
       retrying={retrying}
