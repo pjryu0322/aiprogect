@@ -379,6 +379,11 @@
   background: var(--color-bg);
 }
 
+.input-screen-layout__center-header {
+  flex-shrink: 0;
+  padding: 14px 16px 0;
+}
+
 .input-screen-layout__center-body {
   flex: 1;
   overflow-y: auto;

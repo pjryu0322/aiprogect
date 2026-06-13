@@ -147,6 +147,12 @@ export function InputScreen({
         </aside>
 
         <section className="input-screen-layout__center" aria-label="작업 공간">
+          <header className="input-screen-layout__center-header">
+            <h2 className="workspace-panel__title">작업 공간</h2>
+            <p className="workspace-panel__subtitle">
+              업로드·변환·화자 분리·초안 생성 진행을 확인합니다
+            </p>
+          </header>
           <div className="input-screen-layout__center-body">
             <WorkspaceWorkItems
               status={viewModel.screenStatus}

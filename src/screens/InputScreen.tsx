@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useMeetingInputFlow } from "../../features/input/MeetingInputFlow";
-import type { MeetingInputPayload } from "../../features/input/MeetingInputFlow.types";
+import { useMeetingInputFlow } from "../features/input/MeetingInputFlow";
+import type { MeetingInputPayload } from "../features/input/MeetingInputFlow.types";
 import {
   InputScreen,
   InputScreenMeetingFilesSection,
