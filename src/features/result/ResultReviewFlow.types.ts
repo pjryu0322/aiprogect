@@ -83,6 +83,7 @@ export interface ResultReviewFlowTabsProps {
   onTabChange: (tab: ResultReviewTabId) => void;
   disabled?: boolean;
   className?: string;
+  tabPanelId?: string;
 }
 
 export interface ResultReviewFlowSummaryProps {
@@ -95,6 +96,7 @@ export interface ResultReviewFlowSummaryProps {
   onRetry?: () => void;
   onDecisionSelect?: (decision: MeetingDecision) => void;
   onActionItemSelect?: (actionItem: MeetingActionItem) => void;
+  retrying?: boolean;
   className?: string;
 }
 
@@ -105,12 +107,16 @@ export interface ResultReviewFlowScriptProps {
   errorMessage?: string | null;
   onRetry?: () => void;
   onSegmentSelect?: (segment: TranscriptSegment) => void;
+  retrying?: boolean;
   className?: string;
 }
 
 export interface ResultReviewFlowDraftTimelineProps {
   status: ResultReviewFlowStatus;
   events: DraftTimelineEvent[];
+  errorMessage?: string | null;
+  onRetry?: () => void;
+  retrying?: boolean;
   className?: string;
 }
 
@@ -118,6 +124,8 @@ export interface ResultReviewFlowReviewActionsProps {
   viewModel: ResultReviewFlowViewModel;
   onReviewAcknowledge?: () => void;
   onProceedNext?: () => void;
+  onRetry?: () => void;
+  retrying?: boolean;
   disabled?: boolean;
   className?: string;
 }
@@ -133,4 +141,5 @@ export interface ResultReviewFlowProps {
   onSegmentSelect?: (segment: TranscriptSegment) => void;
   mobileActive?: boolean;
   disabled?: boolean;
+  retrying?: boolean;
 }

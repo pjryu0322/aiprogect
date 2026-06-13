@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 import type {
   MeetingActionItem,
   MeetingDecision,
@@ -9,6 +9,7 @@ import { EmptyState } from "../../components/common/EmptyState";
 import { ErrorState } from "../../components/common/ErrorState";
 import { LoadingState } from "../../components/common/LoadingState";
 import { NoResultState } from "../../components/common/NoResultState";
+import { RetryAction } from "../../components/common/RetryAction";
 import type {
   ResultReviewFlowDraftTimelineProps,
   ResultReviewFlowPanelProps,
@@ -53,7 +54,8 @@ function renderStatusBoundary(
   emptyTitle: string,
   emptyDescription: string,
   loadingMessage: string,
-  content: ReactNode
+  content: ReactNode,
+  retrying = false
 ) {
   if (status === "loading") {
     return (
@@ -70,6 +72,7 @@ function renderStatusBoundary(
         variant="panel"
         onRetry={onRetry}
         retryLabel="다시 시도"
+        retrying={retrying}
       />
     );
   }
@@ -127,6 +130,7 @@ export function ResultReviewFlowTabs({
   onTabChange,
   disabled = false,
   className,
+  tabPanelId,
 }: ResultReviewFlowTabsProps) {
   const rootClass = ["result-review-flow-tabs", className].filter(Boolean).join(" ");
 
@@ -137,7 +141,9 @@ export function ResultReviewFlowTabs({
           key={tab.id}
           type="button"
           role="tab"
+          id={`result-tab-${tab.id}`}
           aria-selected={activeTab === tab.id}
+          aria-controls={tabPanelId}
           className={`result-tab${activeTab === tab.id ? " result-tab--active" : ""}`}
           disabled={disabled}
           onClick={() => onTabChange(tab.id)}
@@ -159,6 +165,7 @@ export function ResultReviewFlowSummary({
   onRetry,
   onDecisionSelect,
   onActionItemSelect,
+  retrying = false,
   className,
 }: ResultReviewFlowSummaryProps) {
   const rootClass = ["result-review-flow-summary", className].filter(Boolean).join(" ");
@@ -259,7 +266,8 @@ export function ResultReviewFlowSummary({
     "아직 생성된 요약본이 없습니다",
     "회의 녹취 변환과 초안 생성이 완료되면 이 탭에 요약본이 표시됩니다.",
     "요약본을 생성하고 있습니다...",
-    content
+    content,
+    retrying
   );
 }
 
@@ -393,6 +401,7 @@ export function ResultReviewFlowScript({
   errorMessage,
   onRetry,
   onSegmentSelect,
+  retrying = false,
   className,
 }: ResultReviewFlowScriptProps) {
   const rootClass = ["result-review-flow-script", className].filter(Boolean).join(" ");
@@ -422,7 +431,8 @@ export function ResultReviewFlowScript({
     "아직 생성된 스크립트가 없습니다",
     "STT 변환과 화자 분리가 완료되면 이 탭에 화자별 스크립트가 표시됩니다.",
     "스크립트를 생성하고 있습니다...",
-    content
+    content,
+    retrying
   );
 }
 
@@ -480,11 +490,15 @@ function ScriptSegmentCard({
 export function ResultReviewFlowDraftTimeline({
   status,
   events,
+  errorMessage,
+  onRetry,
+  retrying = false,
   className,
 }: ResultReviewFlowDraftTimelineProps) {
   const rootClass = ["result-review-flow-timeline", className]
     .filter(Boolean)
     .join(" ");
+  const hasTimelineError = status === "error";
 
   return (
     <section
@@ -495,29 +509,58 @@ export function ResultReviewFlowDraftTimeline({
         초안 생성 타임라인
       </h3>
 
-      {status === "loading" ? (
+      {status === "loading" && events.length === 0 ? (
         <LoadingState
           loading
           message="초안 생성 단계를 업데이트하고 있습니다..."
           variant="timeline"
         />
       ) : events.length > 0 ? (
-        events.map((event) => (
-          <div
-            key={event.id}
-            className={`timeline-item${
-              event.status === "active" ? " timeline-item--active" : ""
-            }${event.status === "done" ? " timeline-item--done" : ""}`}
-          >
-            <div className="timeline-item__dot" aria-hidden="true" />
-            <div className="timeline-item__content">
-              <div className="timeline-item__label">{event.label}</div>
-              <div className="timeline-item__time">
-                {event.status === "pending" ? "대기 중" : event.time}
+        events.map((event) => {
+          const isFailedItem = hasTimelineError && event.status === "active";
+
+          if (isFailedItem && onRetry) {
+            return (
+              <RetryAction
+                key={event.id}
+                failed
+                message={errorMessage ?? "초안 생성 중 오류가 발생했습니다"}
+                onRetry={onRetry}
+                retrying={retrying}
+                variant="timeline"
+              />
+            );
+          }
+
+          if (event.status === "active") {
+            return (
+              <LoadingState
+                key={event.id}
+                loading
+                message={event.label}
+                label={`${event.label} 진행 중`}
+                variant="timeline"
+              />
+            );
+          }
+
+          return (
+            <div
+              key={event.id}
+              className={`timeline-item${
+                event.status === "active" ? " timeline-item--active" : ""
+              }${event.status === "done" ? " timeline-item--done" : ""}`}
+            >
+              <div className="timeline-item__dot" aria-hidden="true" />
+              <div className="timeline-item__content">
+                <div className="timeline-item__label">{event.label}</div>
+                <div className="timeline-item__time">
+                  {event.status === "pending" ? "대기 중" : event.time}
+                </div>
               </div>
             </div>
-          </div>
-        ))
+          );
+        })
       ) : (
         <div className="panel-placeholder" role="status">
           변환 단계가 시작되면
@@ -533,10 +576,16 @@ export function ResultReviewFlowReviewActions({
   viewModel,
   onReviewAcknowledge,
   onProceedNext,
+  onRetry,
+  retrying = false,
   disabled = false,
   className,
 }: ResultReviewFlowReviewActionsProps) {
-  if (!viewModel.canReview && !viewModel.hasError) {
+  const showReview = viewModel.canReview && Boolean(onReviewAcknowledge);
+  const showProceed = viewModel.canProceed && Boolean(onProceedNext);
+  const showRetry = viewModel.hasError && Boolean(onRetry);
+
+  if (!showReview && !showProceed && !showRetry) {
     return null;
   }
 
@@ -556,7 +605,18 @@ export function ResultReviewFlowReviewActions({
         background: "var(--color-surface)",
       }}
     >
-      {viewModel.canReview && onReviewAcknowledge ? (
+      {showRetry ? (
+        <button
+          type="button"
+          className="center-panel__send-btn"
+          style={{ padding: "8px 14px", fontSize: "12px" }}
+          disabled={disabled || retrying}
+          onClick={onRetry}
+        >
+          {retrying ? "다시 시도 중..." : "다시 시도"}
+        </button>
+      ) : null}
+      {showReview ? (
         <button
           type="button"
           className="center-panel__send-btn"
@@ -567,7 +627,7 @@ export function ResultReviewFlowReviewActions({
           결과 검토 완료
         </button>
       ) : null}
-      {viewModel.canProceed && onProceedNext ? (
+      {showProceed ? (
         <button
           type="button"
           className="center-panel__send-btn"
@@ -621,7 +681,9 @@ export function ResultReviewFlow({
   onSegmentSelect,
   mobileActive = false,
   disabled = false,
+  retrying = false,
 }: ResultReviewFlowProps) {
+  const tabPanelId = useId();
   const rootClass = [
     "result-review-flow",
     mobileActive ? "result-review-flow--mobile-active" : "",
@@ -635,9 +697,15 @@ export function ResultReviewFlow({
         activeTab={viewModel.activeTab}
         onTabChange={onTabChange}
         disabled={disabled || viewModel.isLoading}
+        tabPanelId={tabPanelId}
       />
 
-      <div className="result-panel__body" role="tabpanel">
+      <div
+        id={tabPanelId}
+        className="result-panel__body"
+        role="tabpanel"
+        aria-labelledby={`result-tab-${viewModel.activeTab}`}
+      >
         {viewModel.activeTab === "summary" ? (
           <ResultReviewFlowSummary
             status={viewModel.status}
@@ -649,6 +717,7 @@ export function ResultReviewFlow({
             onRetry={onRetry}
             onDecisionSelect={onDecisionSelect}
             onActionItemSelect={onActionItemSelect}
+            retrying={retrying}
           />
         ) : (
           <ResultReviewFlowScript
@@ -658,6 +727,7 @@ export function ResultReviewFlow({
             errorMessage={viewModel.errorMessage}
             onRetry={onRetry}
             onSegmentSelect={onSegmentSelect}
+            retrying={retrying}
           />
         )}
       </div>
@@ -665,12 +735,17 @@ export function ResultReviewFlow({
       <ResultReviewFlowDraftTimeline
         status={viewModel.status}
         events={viewModel.draftTimeline}
+        errorMessage={viewModel.errorMessage}
+        onRetry={onRetry}
+        retrying={retrying}
       />
 
       <ResultReviewFlowReviewActions
         viewModel={viewModel}
         onReviewAcknowledge={onReviewAcknowledge}
         onProceedNext={onProceedNext}
+        onRetry={onRetry}
+        retrying={retrying}
         disabled={disabled}
       />
     </ResultReviewFlowPanel>

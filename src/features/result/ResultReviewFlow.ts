@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useReducer } from "react";
+import { useCallback, useMemo, useReducer, useRef } from "react";
 import type {
   ResultReviewFlowState,
   ResultReviewFlowStatus,
@@ -39,6 +39,7 @@ type ResultReviewFlowAction =
   | { type: "ERROR"; errorMessage?: string | null }
   | { type: "SUCCESS"; payload?: Partial<ResultReviewPayload> }
   | { type: "CLEAR" }
+  | { type: "RESTORE"; state: ResultReviewFlowState }
   | { type: "RESET" };
 
 function createEmptyResults(): Pick<
@@ -163,6 +164,8 @@ function resultReviewFlowReducer(
         status: "empty",
         errorMessage: null,
       };
+    case "RESTORE":
+      return action.state;
     case "RESET":
       return createInitialState();
     default:
@@ -233,6 +236,7 @@ export function useResultReviewFlow(options: UseResultReviewFlowOptions = {}) {
     initialOptions,
     createInitialState
   );
+  const initialOptionsRef = useRef(initialOptions);
 
   const viewModel = useMemo(
     () => buildResultReviewFlowViewModel(state),
@@ -275,7 +279,10 @@ export function useResultReviewFlow(options: UseResultReviewFlowOptions = {}) {
   }, []);
 
   const reset = useCallback(() => {
-    dispatch({ type: "RESET" });
+    dispatch({
+      type: "RESTORE",
+      state: createInitialState(initialOptionsRef.current),
+    });
   }, []);
 
   const retry = useCallback(() => {
