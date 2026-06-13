@@ -1,0 +1,147 @@
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-error-text, #991b1b);
+}
+
+.error-message__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-error, #dc2626);
+}
+
+.error-message__icon-svg {
+  width: 20px;
+  height: 20px;
+}
+
+.error-message--panel {
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  padding: 24px 20px;
+  border: 1px dashed var(--color-error-border, #fca5a5);
+  border-radius: var(--radius-md, 10px);
+  background: var(--color-error-soft, #fef2f2);
+  text-align: center;
+}
+
+.error-message--panel .error-message__icon-svg {
+  width: 28px;
+  height: 28px;
+}
+
+.error-message--inline {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border: 1px solid var(--color-error-border, #fca5a5);
+  border-radius: var(--radius-md, 10px);
+  background: var(--color-error-soft, #fef2f2);
+}
+
+.error-message--chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--color-error-border, #fca5a5);
+  background: var(--color-error-soft, #fef2f2);
+  font-size: 12px;
+}
+
+.error-message--chip .error-message__icon-svg {
+  width: 14px;
+  height: 14px;
+}
+
+.error-message--timeline {
+  display: flex;
+  gap: 10px;
+  padding: 8px 0;
+  position: relative;
+}
+
+.error-message__timeline-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid var(--color-error, #dc2626);
+  background: var(--color-error, #dc2626);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.error-message__timeline-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.error-message__content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.error-message__message {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.error-message__text {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.error-message__description {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--color-error-text-muted, #b91c1c);
+  line-height: 1.5;
+}
+
+.error-message--panel .error-message__description {
+  font-size: 12px;
+}
+
+.error-message__retry-btn {
+  flex-shrink: 0;
+  margin-top: 4px;
+  padding: 8px 16px;
+  border-radius: var(--radius-md, 10px);
+  background: var(--color-error, #dc2626);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.error-message--inline .error-message__retry-btn,
+.error-message--chip .error-message__retry-btn {
+  margin-top: 0;
+  padding: 6px 12px;
+}
+
+.error-message__retry-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.error-message__retry-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.error-message--retrying .error-message__retry-btn {
+  background: var(--color-error-text-muted, #b91c1c);
+}

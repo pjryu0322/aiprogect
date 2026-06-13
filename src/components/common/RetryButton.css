@@ -1,0 +1,65 @@
+.retry-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md, 10px);
+  font-weight: 600;
+  transition: opacity 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.retry-button--md {
+  padding: 8px 16px;
+  font-size: 12px;
+}
+
+.retry-button--sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.retry-button--primary {
+  background: var(--color-error, #dc2626);
+  color: #fff;
+}
+
+.retry-button--secondary {
+  background: var(--color-surface-muted, #f0f2f6);
+  color: var(--color-text, #1a2332);
+  border: 1px solid var(--color-border, #dde2ea);
+}
+
+.retry-button--outline {
+  background: transparent;
+  color: var(--color-error, #dc2626);
+  border: 1px solid var(--color-error-border, #fca5a5);
+}
+
+.retry-button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.retry-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.retry-button--busy.retry-button--primary {
+  background: var(--color-error-text-muted, #b91c1c);
+}
+
+.retry-button__spinner .loading-spinner__ring {
+  border-color: rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+}
+
+.retry-button--secondary .retry-button__spinner .loading-spinner__ring,
+.retry-button--outline .retry-button__spinner .loading-spinner__ring {
+  border-color: var(--color-border, #dde2ea);
+  border-top-color: var(--color-primary, #2563eb);
+}
+
+.retry-button__label {
+  line-height: 1.2;
+}
